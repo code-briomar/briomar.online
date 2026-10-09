@@ -72,9 +72,6 @@ Inspecting `AndroidManifest.xml` (lines 144 to 219) reveals **24 synchronous mod
 </provider>
 ```
 
-> **In Plain English:**  
-> Imagine you board a matatu at Railways just to go two stages down to Upper Hill. You're in a rush, you just want a quick 2-minute trip. But before the driver can even turn the ignition, 24 different makangas, luggage loaders, and stage promoters swarm the vehicle—packing sacks of waru onto the roof, tuning three different sound systems, and logging names into a dusty notebook—while you’re stuck in your seat wondering why the mat won’t just leave the stage.
-
 Before you can type a single till digit, the app spins up:
 * The **Alibaba Griver engine** (a mini-app container originally built for Alipay).
 * **Adjust SDK** (marketing attribution).
