@@ -15,7 +15,7 @@ const isBlogPost = Astro.url.pathname.includes('/blog/');
 
 <html lang="en">
 	<head>
-		<BaseHead title={title} description={description} />
+		<BaseHead title={title} description={description} image={heroImage} />
 		<style>
 			.post-container {
 				width: 100%;

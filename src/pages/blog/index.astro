@@ -15,7 +15,7 @@ const posts = (await getCollection('blog')).sort(
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Blog • ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<BaseHead title={`Blog • ${SITE_TITLE}`} description={SITE_DESCRIPTION} image={posts[0]?.data.heroImage} />
 		<style>
 			.blog-container {
 				width: 100%;
