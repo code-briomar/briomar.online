@@ -7,7 +7,7 @@ heroImage: "../../assets/mpesa-audit-banner.jpg"
 
 Every time you tap the M-PESA app icon on your phone, you wait.
 
-You stare at the green splash screen, watching the branding animation linger while your phone sits idle. If you are in a rush to send money or complete a quick transaction, those seconds feel like an eternity. And even though Safaricom zero-rates M-PESA traffic—meaning you don't need active data bundles to use the app—it still demands a live packet data connection. Whenever cellular reception drops or network handshakes stall, the launch delay stretches even further before the PIN pad or home screen finally appears.
+You stare at the green splash screen, watching the branding animation linger while your phone sits idle. If you are in a rush to send money or complete a quick transaction, those seconds feel like an eternity. And even though Safaricom zero-rates M-PESA traffic (meaning you don't need active data bundles to use the app), it still demands a live packet data connection. Whenever cellular reception drops or network handshakes stall, the launch delay stretches even further before the PIN pad or home screen finally appears.
 
 For years, users assumed the sluggishness was an inevitable hardware problem (*"Simu yangu imezeeka"*) or a mobile network bottleneck.
 
@@ -161,7 +161,7 @@ Even though Safaricom zero-rates the official app, it still relies on active IP 
 [Launch Android Telephony Intent (ACTION_CALL)]
        │
        ▼
-[Direct GSM Cellular Handshake — Zero Internet Required]
+[Direct GSM Cellular Handshake: Zero Internet Required]
        │
        ▼
 [Instant SIM Dialog: "Enter M-PESA PIN to Pay KES 150 to..."]
