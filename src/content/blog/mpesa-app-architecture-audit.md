@@ -23,7 +23,7 @@ What the code reveals is startling: the startup delay isn't caused by your phone
 
 * **The 3-Second Delay:** The app has an intentional 3-second timer that holds you on the logo screen before opening the app.
 * **The 24-Tool Traffic Jam:** Before letting you enter your PIN, the app forces your phone to load 24 background tracking and mini-app tools all at once.
-* **Heavy Security Overhead:** To protect against tampering, the app scrambles and encrypts its internal files. Your phone has to constantly decrypt them while you use the app, which slows down navigation.
+* **Heavy Security Locks:** To protect against fraud and hacking, the app locks and hides its code behind extra security barriers. Your phone has to constantly unlock these pieces behind the scenes while you use the app, which creates noticeable lag.
 * **Too Many Layers:** Instead of opening a screen directly, the app runs 6 separate background checks (security, languages, tracking) before showing the payment box.
 * **The Faster Way:** Basic payments do not need heavy internet engines. Standard cellular dial codes can complete the exact same payment in under a second without data.
 
@@ -53,7 +53,10 @@ new CountDownTimer(3000L, 1000L) {
 }.start();
 ```
 
-Even if a modern phone finishes loading everything in less than half a second, the code still forces you to wait out the full 3 seconds before taking you to the next screen.
+> **The Elevator Analogy:**  
+> Imagine an elevator that reaches your floor in less than a second, but the doors are programmed to stay locked for 3 full seconds just to force you to look at a company advertisement on the wall. 
+> 
+> Even if a modern phone finishes loading everything almost instantly, the app forces you to sit through 3 full seconds of the green logo before opening.
 
 Under standard Android guidelines, an app should open in under half a second. A forced 3-second delay on an everyday payment tool is huge.
 
@@ -75,11 +78,11 @@ Because your phone has to finish loading all 24 tools before it can draw the scr
 
 ## 3. Heavy Security Checks
 
-Banking apps need strong security to prevent fraud. Safaricom uses security software to protect their code.
+Banking apps need strong security to prevent fraud and hacking. Safaricom locks and scrambles the app's code to keep it safe from reverse-engineering.
 
 However, this protection comes at a speed cost:
 
-The app encrypts its text, buttons, and internal files. Instead of running code directly, your phone has to spend extra processing power decrypting everything in the background while you tap around. This slows down navigation and drains battery faster.
+Instead of running straightforward commands, the app locks its buttons, labels, and internal instructions. Your phone has to constantly unlock and translate these pieces behind the scenes as you tap around, which makes basic navigation feel sluggish.
 
 ---
 
