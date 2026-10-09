@@ -15,13 +15,14 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage } = Astro.props;
+const { title, description, image } = Astro.props;
 
-const rawImagePath = image
-	? (typeof image === 'string' ? image : image.src)
+// Use dedicated 80KB 1200x630 JPEG for social preview crawlers (under WhatsApp 300KB ceiling)
+const rawImagePath = typeof image === 'string' && image.startsWith('/og-')
+	? image
 	: '/og-banner.jpg';
 
-const imageURL = new URL(rawImagePath, Astro.site).toString() + (rawImagePath.includes('?') ? '' : '?v=3');
+const imageURL = new URL(rawImagePath, Astro.site).toString() + '?v=4';
 
 const ogType = Astro.url.pathname.includes('/blog/') && Astro.url.pathname !== '/blog/' ? 'article' : 'website';
 ---
@@ -51,7 +52,8 @@ const ogType = Astro.url.pathname.includes('/blog/') && Astro.url.pathname !== '
 <title>{title}</title>
 <meta name="description" content={description} />
 
-<!-- Open Graph / Facebook -->
+<!-- Open Graph / Facebook / WhatsApp -->
+<meta property="og:site_name" content={SITE_TITLE} />
 <meta property="og:type" content={ogType} />
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:title" content={title} />
