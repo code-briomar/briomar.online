@@ -217,6 +217,38 @@ hr {
 	margin: 2.5em 0;
 }
 
+details {
+	background: #0c0c0c;
+	border: 1px solid #222222;
+	border-radius: 10px;
+	padding: 1rem 1.25rem;
+	margin: 2em 0;
+	transition: border-color 0.2s ease;
+}
+
+details[open] {
+	border-color: #333333;
+	background: #0e0e0e;
+}
+
+summary {
+	cursor: pointer;
+	font-weight: 600;
+	color: #ffffff;
+	font-size: 0.95rem;
+	user-select: none;
+}
+
+summary:hover {
+	color: #93c5fd;
+}
+
+details[open] summary {
+	margin-bottom: 1rem;
+	padding-bottom: 0.75rem;
+	border-bottom: 1px solid #1f1f1f;
+}
+
 @media (max-width: 640px) {
 	body {
 		font-size: 16.5px;
