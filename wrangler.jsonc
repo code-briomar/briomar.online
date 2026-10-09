@@ -1,0 +1,11 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "briomar-online",
+	"compatibility_date": "2026-10-09",
+	"build": {
+		"command": "npm run build"
+	},
+	"assets": {
+		"directory": "./dist"
+	}
+}
