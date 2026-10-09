@@ -7,7 +7,7 @@ heroImage: "../../assets/blog-placeholder-1.jpg"
 
 Every time you tap the M-PESA app icon on your phone, you wait.
 
-You stare at the green splash screen, watching the branding animation linger while your phone sits idle. If you are in a rush to send money or complete a quick transaction, those seconds feel like an eternity. If your data bundles run low or your network signal fluctuates, the app hangs even longer before the PIN pad or home screen finally appears.
+You stare at the green splash screen, watching the branding animation linger while your phone sits idle. If you are in a rush to send money or complete a quick transaction, those seconds feel like an eternity. And even though Safaricom zero-rates M-PESA traffic—meaning you don't need active data bundles to use the app—it still demands a live packet data connection. Whenever cellular reception drops or network handshakes stall, the launch delay stretches even further before the PIN pad or home screen finally appears.
 
 For years, users assumed the sluggishness was an inevitable hardware problem (*"Simu yangu imezeeka"*) or a mobile network bottleneck.
 
@@ -129,7 +129,7 @@ At every tier of this 6-level chain, lifecycle events (`onCreate`, `onResume`, `
 Critiquing code is easy; building a better solution is what actually matters.
 
 After uncovering these architectural bottlenecks, I set out to answer a simple question:  
-**Can we build an ultra-fast, zero-bloat companion app that works 100% offline without needing internet bundles?**
+**Can we build an ultra-fast, zero-bloat companion app that works 100% offline without even requiring mobile data enabled?**
 
 That resulted in **`MpesaQuick`**, an experimental companion prototype built with modern Android engineering:
 
@@ -142,7 +142,7 @@ That resulted in **`MpesaQuick`**, an experimental companion prototype built wit
 
 ### How It Activates USSD in Under 200ms
 
-Instead of opening a bloated app that needs to connect to remote web servers over fragile mobile data, `MpesaQuick` bypasses HTTP APIs entirely:
+Even though Safaricom zero-rates the official app, it still relies on active IP packet handshakes and heavy HTTP gateways that stall whenever cellular data reception drops. `MpesaQuick` bypasses IP networking entirely:
 
 <div style="text-align: center; margin: 2em 0;">
   <img src="/images/transaction_demo.webp" alt="MpesaQuick Live USSD Initiation Recording" style="max-width: 320px; border-radius: 18px; box-shadow: var(--box-shadow); border: 1px solid rgba(var(--gray), 25%); display: inline-block;" />
