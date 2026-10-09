@@ -139,9 +139,9 @@ After uncovering these architectural bottlenecks, I set out to answer a simple q
 That resulted in **`MpesaQuick`**, an experimental companion prototype built with modern Android engineering:
 
 <div style="text-align: center; margin: 2em 0;">
-  <img src="/images/transaction_demo.webp" alt="MpesaQuick Live USSD Initiation" style="max-width: 320px; border-radius: 18px; box-shadow: var(--box-shadow); border: 1px solid rgba(var(--gray), 25%); display: inline-block;" />
+  <img src="/images/mpesaquick-screenshot-157-blurred.png" alt="MpesaQuick Interface with Fee Calculation" style="max-width: 320px; border-radius: 18px; box-shadow: var(--box-shadow); border: 1px solid rgba(var(--gray), 25%); display: inline-block;" />
   <p style="font-size: 0.85em; color: rgb(var(--gray)); margin-top: 0.8em;">
-    <em>Figure 1: Live screen capture initiating an offline transaction on a Samsung test device (recipient phone numbers and contacts blurred for privacy). Notice the total fee reflection ("Pay kes. 157 with") and automated navigation straight to the M-PESA PIN prompt.</em>
+    <em>Figure 1: The MpesaQuick interface. Notice the fee transparency: for a KES 150 transaction with a KES 7.00 fee, the primary action button computes the exact total deduction ("Pay kes. 157 with") before you dial.</em>
   </p>
 </div>
 
@@ -149,8 +149,15 @@ That resulted in **`MpesaQuick`**, an experimental companion prototype built wit
 
 Instead of opening a bloated app that needs to connect to remote web servers over fragile 4G inside a supermarket basement, `MpesaQuick` bypasses HTTP APIs entirely:
 
+<div style="text-align: center; margin: 2em 0;">
+  <img src="/images/transaction_demo.webp" alt="MpesaQuick Live USSD Initiation Recording" style="max-width: 320px; border-radius: 18px; box-shadow: var(--box-shadow); border: 1px solid rgba(var(--gray), 25%); display: inline-block;" />
+  <p style="font-size: 0.85em; color: rgb(var(--gray)); margin-top: 0.8em;">
+    <em>Figure 2: Live screen capture initiating the offline transaction on a Samsung test device (contacts blurred for privacy). Tapping the button launches *334# and automates straight to the native M-PESA PIN prompt.</em>
+  </p>
+</div>
+
 ```text
-[Tap "Pay KES 150"]
+[Tap "Pay kes. 157 with"]
        │
        ▼
 [Format GSM USSD String: *334*2*1*TILL*150#]
@@ -176,8 +183,9 @@ Instead of opening a bloated app that needs to connect to remote web servers ove
 ## What’s Coming Next in This Series
 
 This is Part 1 of our mobile systems teardown. In the upcoming posts, we will explore:
-* **Part 2:** *The 7 Embedded Engines: Alibaba Griver and the Super-App Identity Crisis.*
-* **Part 3:** *Forensics of a Bug: Why M-PESA PDF Receipts Fail on Android 11+.*
+
+* **Part 2:** *Why Is Alibaba Inside Safaricom’s Code? Unpacking the 150MB Monster*
+* **Part 3:** *Who Is Watching Your Wallet? The 24 Trackers Lurking Inside M-PESA*
 
 ---
 
