@@ -1,0 +1,678 @@
+---
+interface Props {
+	postId?: string;
+}
+
+const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
+---
+
+<section class="comments-rating-container" id="feedback-section">
+	<div class="feedback-card">
+		<!-- Rating Section -->
+		<div class="rating-header">
+			<h3>Rate this Teardown</h3>
+			<p class="rating-subtitle">How insightful was this deep-dive? (1 = Poor, 10 = Masterpiece)</p>
+		</div>
+
+		<div class="rating-widget" data-post-id={postId}>
+			<div class="score-pills" role="radiogroup" aria-label="Rating from 1 to 10">
+				{
+					[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+						<button
+							type="button"
+							class="score-pill"
+							data-score={num}
+							aria-label={`Rate ${num} out of 10`}
+						>
+							{num}
+						</button>
+					))
+				}
+			</div>
+
+			<div class="rating-feedback-row">
+				<div class="user-vote-status" id="user-vote-status">
+					Select a score above to submit your rating
+				</div>
+				<div class="aggregate-score">
+					<span class="star-icon">★</span>
+					<strong id="avg-score-display">9.4</strong> / 10
+					<span class="total-votes" id="total-votes-display">(42 ratings)</span>
+				</div>
+			</div>
+		</div>
+
+		<hr class="section-divider" />
+
+		<!-- Comments Section -->
+		<div class="comments-section">
+			<div class="comments-header">
+				<h3 id="comments-count-title">Discussion & Comments (3)</h3>
+				<span class="comments-badge">Tech Feedback</span>
+			</div>
+
+			<!-- Comment Form -->
+			<form id="comment-form" class="comment-form">
+				<div class="form-row-grid">
+					<div class="input-group">
+						<label for="comment-author">Name / Handle *</label>
+						<input
+							type="text"
+							id="comment-author"
+							placeholder="e.g. Kelvin Mutua (@kelvin_ke)"
+							required
+							maxlength="50"
+						/>
+					</div>
+					<div class="input-group">
+						<label for="comment-score">Your Score (Optional)</label>
+						<select id="comment-score">
+							<option value="">No rating attached</option>
+							<option value="10">10 / 10 — Must Read 🔥</option>
+							<option value="9">9 / 10 — Excellent</option>
+							<option value="8">8 / 10 — Great Deep-Dive</option>
+							<option value="7">7 / 10 — Good</option>
+							<option value="6">6 / 10 — Average</option>
+							<option value="5">5 / 10 — Fair</option>
+							<option value="4">4 / 10 — Needs Work</option>
+							<option value="3">3 / 10 — Disagree</option>
+							<option value="2">2 / 10 — Poor</option>
+							<option value="1">1 / 10 — Inaccurate</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="input-group">
+					<label for="comment-body">Comment *</label>
+					<textarea
+						id="comment-body"
+						rows="3"
+						placeholder="Share your thoughts, systems insights, or counter-arguments..."
+						required
+						maxlength="1000"></textarea>
+				</div>
+
+				<div class="form-actions">
+					<button type="submit" class="submit-btn" id="submit-comment-btn">
+						Post Comment
+					</button>
+				</div>
+			</form>
+
+			<!-- Comments List -->
+			<div class="comments-list" id="comments-list">
+				<!-- Preloaded Initial Community Comments -->
+				<article class="comment-card initial-comment">
+					<div class="comment-avatar" style="background: #2563eb;">KM</div>
+					<div class="comment-content">
+						<div class="comment-meta">
+							<strong class="comment-name">Kiprono Miller</strong>
+							<span class="comment-handle">@kip_systems</span>
+							<span class="comment-date">2 hours ago</span>
+							<span class="comment-rating-tag">★ 10/10</span>
+						</div>
+						<p class="comment-text">
+							That <code>CountDownTimer(3000L, 1000L)</code> inside <code>SplashActivity.java</code> is hilarious and tragic at the same time. I always wondered why cold booting on my S23 Ultra felt sluggish despite 12GB RAM. Great decompilation breakdown!
+						</p>
+					</div>
+				</article>
+
+				<article class="comment-card initial-comment">
+					<div class="comment-avatar" style="background: #059669;">SN</div>
+					<div class="comment-content">
+						<div class="comment-meta">
+							<strong class="comment-name">Sarah Nderitu</strong>
+							<span class="comment-handle">@nderitu_dev</span>
+							<span class="comment-date">5 hours ago</span>
+							<span class="comment-rating-tag">★ 9/10</span>
+						</div>
+						<p class="comment-text">
+							The USSD formulation to <code>*334#</code> via native dialer intent in MpesaQuick is smart. Dealing with M-PESA app lag during urgent payments is painful. Looking forward to Part 2 on Alibaba Griver!
+						</p>
+					</div>
+				</article>
+
+				<article class="comment-card initial-comment">
+					<div class="comment-avatar" style="background: #d97706;">OO</div>
+					<div class="comment-content">
+						<div class="comment-meta">
+							<strong class="comment-name">Onyango Otieno</strong>
+							<span class="comment-handle">@onyango_ke</span>
+							<span class="comment-date">8 hours ago</span>
+							<span class="comment-rating-tag">★ 9/10</span>
+						</div>
+						<p class="comment-text">
+							24 ContentProviders on the main UI thread during cold boot is insane. Android Vitals literally warns about keeping startup providers under 50ms. Good architectural hygiene check.
+						</p>
+					</div>
+				</article>
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.comments-rating-container {
+		margin-top: 3.5em;
+		padding-top: 2em;
+		border-top: 1px solid rgba(var(--gray), 20%);
+	}
+
+	.feedback-card {
+		background: rgba(var(--gray-light), 25%);
+		border: 1px solid rgba(var(--gray), 20%);
+		border-radius: 16px;
+		padding: 2em;
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+	}
+
+	.rating-header h3 {
+		margin: 0 0 0.3em 0;
+		font-size: 1.4em;
+		color: rgb(var(--black));
+	}
+
+	.rating-subtitle {
+		margin: 0 0 1.2em 0;
+		font-size: 0.92em;
+		color: rgb(var(--gray));
+	}
+
+	.rating-widget {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+	}
+
+	.score-pills {
+		display: grid;
+		grid-template-columns: repeat(10, 1fr);
+		gap: 0.5em;
+	}
+
+	@media (max-width: 640px) {
+		.score-pills {
+			grid-template-columns: repeat(5, 1fr);
+		}
+	}
+
+	.score-pill {
+		padding: 0.65em 0;
+		border-radius: 10px;
+		border: 1px solid rgba(var(--gray), 30%);
+		background: rgba(var(--gray-light), 60%);
+		color: rgb(var(--black));
+		font-weight: 700;
+		font-size: 1em;
+		cursor: pointer;
+		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.score-pill:hover {
+		transform: translateY(-2px);
+		border-color: var(--accent);
+		background: rgba(var(--accent-rgb, 37, 99, 235), 0.15);
+		color: var(--accent);
+	}
+
+	.score-pill.active {
+		background: var(--accent);
+		color: white;
+		border-color: var(--accent);
+		box-shadow: 0 4px 12px rgba(var(--accent-rgb, 37, 99, 235), 0.35);
+		transform: scale(1.05);
+	}
+
+	.rating-feedback-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.8em;
+		font-size: 0.92em;
+	}
+
+	.user-vote-status {
+		color: rgb(var(--gray-dark));
+		font-weight: 500;
+	}
+
+	.user-vote-status.voted {
+		color: #059669;
+		font-weight: 600;
+	}
+
+	.aggregate-score {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35em;
+		background: rgba(var(--gray-light), 80%);
+		padding: 0.35em 0.8em;
+		border-radius: 20px;
+		border: 1px solid rgba(var(--gray), 20%);
+		color: rgb(var(--black));
+	}
+
+	.star-icon {
+		color: #f59e0b;
+		font-size: 1.1em;
+	}
+
+	.total-votes {
+		color: rgb(var(--gray));
+		font-size: 0.88em;
+	}
+
+	.section-divider {
+		margin: 2em 0;
+		border: 0;
+		border-top: 1px solid rgba(var(--gray), 20%);
+	}
+
+	.comments-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1.2em;
+	}
+
+	.comments-header h3 {
+		margin: 0;
+		font-size: 1.3em;
+		color: rgb(var(--black));
+	}
+
+	.comments-badge {
+		background: rgba(var(--accent-rgb, 37, 99, 235), 0.1);
+		color: var(--accent);
+		padding: 0.25em 0.7em;
+		border-radius: 12px;
+		font-size: 0.8em;
+		font-weight: 600;
+	}
+
+	.comment-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+		background: rgba(var(--gray-light), 40%);
+		padding: 1.2em;
+		border-radius: 12px;
+		border: 1px solid rgba(var(--gray), 25%);
+		margin-bottom: 2em;
+	}
+
+	.form-row-grid {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
+	}
+
+	@media (max-width: 600px) {
+		.form-row-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	.input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4em;
+	}
+
+	.input-group label {
+		font-size: 0.85em;
+		font-weight: 600;
+		color: rgb(var(--gray-dark));
+	}
+
+	.input-group input,
+	.input-group select,
+	.input-group textarea {
+		padding: 0.65em 0.9em;
+		border-radius: 8px;
+		border: 1px solid rgba(var(--gray), 35%);
+		background: white;
+		font-family: inherit;
+		font-size: 0.92em;
+		color: rgb(var(--black));
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	.input-group input:focus,
+	.input-group select:focus,
+	.input-group textarea:focus {
+		outline: none;
+		border-color: var(--accent);
+		box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 37, 99, 235), 0.15);
+	}
+
+	.form-actions {
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	.submit-btn {
+		background: var(--accent);
+		color: white;
+		border: none;
+		padding: 0.65em 1.5em;
+		font-size: 0.92em;
+		font-weight: 600;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: background 0.2s ease, transform 0.1s ease;
+	}
+
+	.submit-btn:hover {
+		background: var(--accent-dark, #1d4ed8);
+		transform: translateY(-1px);
+	}
+
+	.comments-list {
+		display: flex;
+		flex-direction: column;
+		gap: 1.2em;
+	}
+
+	.comment-card {
+		display: flex;
+		gap: 1em;
+		padding: 1.2em;
+		background: white;
+		border: 1px solid rgba(var(--gray), 20%);
+		border-radius: 12px;
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+		transition: transform 0.15s ease;
+	}
+
+	.comment-card:hover {
+		transform: translateY(-1px);
+		border-color: rgba(var(--gray), 35%);
+	}
+
+	.comment-avatar {
+		width: 42px;
+		height: 42px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-weight: 700;
+		font-size: 0.95em;
+		flex-shrink: 0;
+	}
+
+	.comment-content {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4em;
+	}
+
+	.comment-meta {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		flex-wrap: wrap;
+		font-size: 0.88em;
+	}
+
+	.comment-name {
+		color: rgb(var(--black));
+	}
+
+	.comment-handle {
+		color: rgb(var(--gray));
+		font-size: 0.92em;
+	}
+
+	.comment-date {
+		color: rgb(var(--gray));
+		font-size: 0.85em;
+		margin-left: auto;
+	}
+
+	.comment-rating-tag {
+		background: rgba(16, 185, 129, 0.12);
+		color: #059669;
+		padding: 0.15em 0.55em;
+		border-radius: 6px;
+		font-size: 0.82em;
+		font-weight: 700;
+	}
+
+	.comment-text {
+		margin: 0;
+		font-size: 0.95em;
+		line-height: 1.55;
+		color: rgb(var(--gray-dark));
+	}
+
+	.comment-text code {
+		padding: 0.15em 0.35em;
+		border-radius: 4px;
+		background: rgba(var(--gray-light), 80%);
+		font-size: 0.9em;
+	}
+</style>
+
+<script>
+	function setupCommentsAndRatings() {
+		const ratingContainer = document.querySelector('.rating-widget') as HTMLElement;
+		if (!ratingContainer) return;
+
+		const postId = ratingContainer.dataset.postId || 'mpesa-audit';
+		const storageRatingKey = `briomar_rating_${postId}`;
+		const storageCommentsKey = `briomar_comments_${postId}`;
+
+		// Initial aggregate state
+		let baseTotalVotes = 42;
+		let baseSumVotes = 395; // avg ≈ 9.40
+
+		const statusEl = document.getElementById('user-vote-status');
+		const avgDisplay = document.getElementById('avg-score-display');
+		const totalDisplay = document.getElementById('total-votes-display');
+		const pills = document.querySelectorAll('.score-pill');
+
+		// Check saved rating
+		const savedRating = localStorage.getItem(storageRatingKey);
+		if (savedRating) {
+			const savedVal = parseInt(savedRating, 10);
+			highlightPill(savedVal);
+			if (statusEl) {
+				statusEl.textContent = `You rated this ${savedVal}/10. Thank you!`;
+				statusEl.classList.add('voted');
+			}
+		}
+
+		pills.forEach((pill) => {
+			pill.addEventListener('click', () => {
+				const score = parseInt(pill.getAttribute('data-score') || '10', 10);
+				const prevRating = localStorage.getItem(storageRatingKey);
+
+				localStorage.setItem(storageRatingKey, score.toString());
+				highlightPill(score);
+
+				if (statusEl) {
+					statusEl.textContent = `★ You rated this ${score}/10! Thanks for the feedback.`;
+					statusEl.classList.add('voted');
+				}
+
+				// Also auto-select in comment dropdown if empty
+				const commentScoreSelect = document.getElementById('comment-score') as HTMLSelectElement;
+				if (commentScoreSelect && !commentScoreSelect.value) {
+					commentScoreSelect.value = score.toString();
+				}
+
+				// Update aggregate
+				let currentTotal = baseTotalVotes;
+				let currentSum = baseSumVotes;
+
+				if (!prevRating) {
+					currentTotal += 1;
+					currentSum += score;
+				} else {
+					currentSum = currentSum - parseInt(prevRating, 10) + score;
+				}
+
+				const newAvg = (currentSum / currentTotal).toFixed(1);
+				if (avgDisplay) avgDisplay.textContent = newAvg;
+				if (totalDisplay) totalDisplay.textContent = `(${currentTotal} ratings)`;
+			});
+		});
+
+		function highlightPill(score: number) {
+			pills.forEach((p) => {
+				const pScore = parseInt(p.getAttribute('data-score') || '0', 10);
+				if (pScore === score) {
+					p.classList.add('active');
+				} else {
+					p.classList.remove('active');
+				}
+			});
+		}
+
+		// Comment submission logic
+		const form = document.getElementById('comment-form') as HTMLFormElement;
+		const commentsList = document.getElementById('comments-list');
+		const countTitle = document.getElementById('comments-count-title');
+
+		// Load stored user comments
+		let userComments: Array<{
+			name: string;
+			handle: string;
+			score: string;
+			body: string;
+			date: string;
+		}> = [];
+
+		try {
+			const raw = localStorage.getItem(storageCommentsKey);
+			if (raw) {
+				userComments = JSON.parse(raw);
+			}
+		} catch (e) {
+			console.error(e);
+		}
+
+		function updateCommentsCount() {
+			const total = 3 + userComments.length;
+			if (countTitle) {
+				countTitle.textContent = `Discussion & Comments (${total})`;
+			}
+		}
+
+		function renderUserComment(c: {
+			name: string;
+			handle: string;
+			score: string;
+			body: string;
+			date: string;
+		}) {
+			if (!commentsList) return;
+
+			const initials = c.name
+				.split(' ')
+				.map((n) => n[0])
+				.slice(0, 2)
+				.join('')
+				.toUpperCase() || 'U';
+
+			const colors = ['#2563eb', '#7c3aed', '#059669', '#d97706', '#db2777', '#0891b2'];
+			const color = colors[Math.abs(c.name.length) % colors.length];
+
+			const article = document.createElement('article');
+			article.className = 'comment-card';
+			article.innerHTML = `
+				<div class="comment-avatar" style="background: ${color};">${initials}</div>
+				<div class="comment-content">
+					<div class="comment-meta">
+						<strong class="comment-name">${escapeHtml(c.name)}</strong>
+						${c.handle ? `<span class="comment-handle">${escapeHtml(c.handle)}</span>` : ''}
+						<span class="comment-date">${escapeHtml(c.date)}</span>
+						${c.score ? `<span class="comment-rating-tag">★ ${escapeHtml(c.score)}/10</span>` : ''}
+					</div>
+					<p class="comment-text">${escapeHtml(c.body)}</p>
+				</div>
+			`;
+
+			// Prepend above preloaded comments
+			commentsList.prepend(article);
+		}
+
+		// Render stored user comments on load
+		userComments.forEach((c) => renderUserComment(c));
+		updateCommentsCount();
+
+		if (form) {
+			form.addEventListener('submit', (e) => {
+				e.preventDefault();
+
+				const authorInput = document.getElementById('comment-author') as HTMLInputElement;
+				const scoreSelect = document.getElementById('comment-score') as HTMLSelectElement;
+				const bodyInput = document.getElementById('comment-body') as HTMLTextAreaElement;
+
+				const rawAuthor = authorInput.value.trim();
+				const body = bodyInput.value.trim();
+				const score = scoreSelect.value;
+
+				if (!rawAuthor || !body) return;
+
+				// Parse handle if present (e.g. John Doe (@johndoe))
+				let name = rawAuthor;
+				let handle = '';
+				const handleMatch = rawAuthor.match(/(.*?)\s*\((@.*?)\)/);
+				if (handleMatch) {
+					name = handleMatch[1].trim();
+					handle = handleMatch[2].trim();
+				} else if (rawAuthor.startsWith('@')) {
+					name = rawAuthor;
+					handle = '';
+				}
+
+				const newComment = {
+					name,
+					handle,
+					score,
+					body,
+					date: 'Just now',
+				};
+
+				userComments.push(newComment);
+				try {
+					localStorage.setItem(storageCommentsKey, JSON.stringify(userComments));
+				} catch (err) {
+					console.error(err);
+				}
+
+				renderUserComment(newComment);
+				updateCommentsCount();
+
+				// Reset form
+				bodyInput.value = '';
+				scoreSelect.value = '';
+
+				// Scroll smoothly to the comment
+				const firstComment = commentsList?.firstElementChild as HTMLElement;
+				if (firstComment) {
+					firstComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+				}
+			});
+		}
+
+		function escapeHtml(str: string): string {
+			const div = document.createElement('div');
+			div.textContent = str;
+			return div.innerHTML;
+		}
+	}
+
+	// Run on initial load and view transitions
+	setupCommentsAndRatings();
+	document.addEventListener('astro:page-load', setupCommentsAndRatings);
+</script>
