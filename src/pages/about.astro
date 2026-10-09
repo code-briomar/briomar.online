@@ -641,69 +641,63 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 						statusBanner.style.display = 'none';
 					}
 
+					const FORMSUBMIT_TOKEN = 'ef85b9414634ca2372efb1e56fb37906';
+
 					try {
-						// Post to Cloudflare Pages edge function (/api/message)
-						const response = await fetch('/api/message', {
+						const response = await fetch(`https://formsubmit.co/ajax/${FORMSUBMIT_TOKEN}`, {
 							method: 'POST',
-							headers: { 'Content-Type': 'application/json' },
-							body: JSON.stringify({ name, email, subject, message, isPublic }),
+							headers: {
+								'Content-Type': 'application/json',
+								Accept: 'application/json',
+							},
+							body: JSON.stringify({
+								name: name,
+								email: email,
+								_replyto: email,
+								_subject: `[briomar.site] ${subject || 'New Message'}`,
+								topic: subject,
+								public_consent: isPublic ? 'Yes' : 'No',
+								message: message,
+							}),
 						});
 
 						const result = await response.json().catch(() => ({ success: false }));
 
-						if (response.ok && result.success !== false) {
+						if (response.ok && (result.success === 'true' || result.success === true)) {
 							showStatus(
 								'Message sent. An email notification has been dispatched. If selected, your thread will appear below once answered.',
 								'success'
 							);
 
-							// Save to visitor's pending threads
-							const newPending = {
-								id: `pending-${Date.now()}`,
-								channel: 'discussion',
-								title: subject || 'General Discussion',
-								name: name,
-								question: message,
-								date: 'Just now',
-								isPublic: isPublic,
-							};
+							if (isPublic) {
+								const newPending = {
+									id: `pending-${Date.now()}`,
+									channel: 'discussion',
+									title: subject || 'General Discussion',
+									name: name,
+									question: message,
+									date: 'Just now',
+									isPublic: isPublic,
+								};
 
-							pendingThreads.unshift(newPending);
-							try {
-								localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(pendingThreads));
-							} catch {}
+								pendingThreads.unshift(newPending);
+								try {
+									localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(pendingThreads));
+								} catch {}
 
-							renderPendingThreads();
+								renderPendingThreads();
+							}
+
 							form.reset();
 							consentInput.checked = true;
 						} else {
-							throw new Error(result.error || 'Failed to dispatch message');
+							throw new Error(result.message || 'Failed to dispatch message');
 						}
 					} catch (err: any) {
-						// Fallback: If edge function is unavailable (e.g. local preview), store locally and confirm
 						showStatus(
-							'Message received. Your message was recorded.',
-							'success'
+							'Could not send message. Please check your connection and try again.',
+							'error'
 						);
-
-						const newPending = {
-							id: `pending-${Date.now()}`,
-							channel: 'inquiry',
-							title: subject || 'General Inquiry',
-							name: name,
-							question: message,
-							date: 'Just now',
-							isPublic: isPublic,
-						};
-
-						pendingThreads.unshift(newPending);
-						try {
-							localStorage.setItem(PENDING_STORAGE_KEY, JSON.stringify(pendingThreads));
-						} catch {}
-
-						renderPendingThreads();
-						form.reset();
-						consentInput.checked = true;
 					} finally {
 						if (submitBtn && btnText) {
 							submitBtn.disabled = false;
