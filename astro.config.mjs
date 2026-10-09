@@ -7,6 +7,9 @@ import { defineConfig, fontProviders } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://briomar.online',
+	redirects: {
+		'/blog/mpesa-app-architecture-audit': '/blog/why-mpesa-is-slow',
+	},
 	integrations: [mdx(), sitemap()],
 	fonts: [
 		{
