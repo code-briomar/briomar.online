@@ -1,6 +1,6 @@
 /*
-  briomar.online - Modern Technical Editorial Stylesheet
-  Inspired by Linear, Vercel, and modern systems engineering blogs
+  briomar.online - Default Dark Mode Technical Editorial Stylesheet
+  Strict dark mode only. Obsidian & Slate developer aesthetic.
 */
 
 *,
@@ -10,18 +10,23 @@
 }
 
 :root {
-	--accent: #2563eb;
-	--accent-dark: #1d4ed8;
-	--accent-subtle: rgba(37, 99, 235, 0.08);
-	--bg-primary: #fafafa;
-	--bg-surface: #ffffff;
-	--black: 15, 23, 42;
-	--gray-dark: 51, 65, 85;
-	--gray: 100, 116, 139;
-	--gray-light: 241, 245, 249;
-	--border-subtle: rgba(0, 0, 0, 0.08);
-	--border-focus: rgba(37, 99, 235, 0.4);
-	--box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+	--accent: #3b82f6;
+	--accent-hover: #60a5fa;
+	--accent-subtle: rgba(59, 130, 246, 0.15);
+	--bg-primary: #0a0d14;
+	--bg-surface: #111622;
+	--bg-card: #151b28;
+	--bg-card-hover: #1a2233;
+	--bg-input: #0e131d;
+	--black: 248, 250, 252;
+	--gray-dark: 203, 213, 225;
+	--gray: 148, 163, 184;
+	--gray-light: 30, 41, 59;
+	--border-subtle: rgba(255, 255, 255, 0.08);
+	--border-light: rgba(255, 255, 255, 0.12);
+	--border-focus: #3b82f6;
+	--box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.4);
+	color-scheme: dark;
 }
 
 html {
@@ -40,6 +45,8 @@ body {
 	text-align: left;
 	font-size: 18px;
 	line-height: 1.7;
+	background-color: var(--bg-primary);
+	color: rgb(var(--gray-dark));
 	overflow-x: hidden;
 	min-height: 100vh;
 	display: flex;
@@ -102,7 +109,7 @@ a {
 }
 
 a:hover {
-	color: var(--accent-dark);
+	color: var(--accent-hover);
 }
 
 p {
@@ -134,13 +141,18 @@ table {
 
 th, td {
 	padding: 0.6em 0.8em;
-	border: 1px solid rgba(var(--gray), 20%);
+	border: 1px solid var(--border-light);
 	text-align: left;
 }
 
 th {
-	background: rgba(var(--gray-light), 60%);
+	background: var(--bg-surface);
 	font-weight: 600;
+	color: rgb(var(--black));
+}
+
+td {
+	background: var(--bg-primary);
 }
 
 img,
@@ -153,12 +165,12 @@ video {
 
 code {
 	padding: 0.2em 0.4em;
-	background-color: rgba(var(--gray-light), 80%);
-	border: 1px solid rgba(var(--gray), 15%);
+	background-color: rgba(255, 255, 255, 0.08);
+	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: 5px;
 	font-size: 0.88em;
 	font-family: "SF Mono", Menlo, Consolas, Monaco, monospace;
-	color: rgb(var(--black));
+	color: #93c5fd;
 }
 
 pre {
@@ -168,16 +180,17 @@ pre {
 	-webkit-overflow-scrolling: touch;
 	font-size: 0.85rem;
 	line-height: 1.55;
-	background: #181824;
+	background: #080b10;
 	color: #e2e8f0;
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+	border: 1px solid var(--border-light);
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 	margin: 1.5em 0;
 }
 
 pre > code {
 	all: unset;
 	font-family: "SF Mono", Menlo, Consolas, Monaco, monospace;
+	color: inherit;
 }
 
 blockquote {
@@ -187,7 +200,7 @@ blockquote {
 	font-size: 0.98em;
 	background: var(--accent-subtle);
 	border-radius: 0 8px 8px 0;
-	color: rgb(var(--gray-dark));
+	color: #cbd5e1;
 }
 
 blockquote p {

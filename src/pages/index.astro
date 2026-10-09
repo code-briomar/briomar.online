@@ -63,11 +63,14 @@ const posts = (await getCollection('blog')).sort(
 				color: white;
 			}
 			.btn-outline {
-				border: 1px solid rgba(var(--gray), 40%);
-				color: rgb(var(--gray-dark));
+				border: 1px solid var(--border-light);
+				color: #cbd5e1;
+				background: var(--bg-surface);
 			}
 			.btn-outline:hover {
-				background: rgba(var(--gray-light), 60%);
+				background: var(--bg-card);
+				color: #f8fafc;
+				border-color: rgba(255, 255, 255, 0.2);
 			}
 			.section-header {
 				display: flex;
@@ -89,15 +92,16 @@ const posts = (await getCollection('blog')).sort(
 				gap: 0.3em;
 				padding: 1.2em;
 				border-radius: 12px;
-				background: rgba(var(--gray-light), 30%);
-				border: 1px solid rgba(var(--gray), 15%);
-				transition: transform 0.2s ease, box-shadow 0.2s ease;
+				background: var(--bg-surface);
+				border: 1px solid var(--border-subtle);
+				transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 				text-decoration: none;
 			}
 			.post-card:hover {
 				transform: translateY(-2px);
 				box-shadow: var(--box-shadow);
-				background: rgba(var(--gray-light), 50%);
+				background: var(--bg-card);
+				border-color: var(--border-light);
 			}
 			.post-title {
 				font-size: 1.35em;

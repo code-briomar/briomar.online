@@ -53,21 +53,22 @@ const pdfPath = '/resume/Kapolon_Braine_Lomoni_Resume.pdf';
 				color: white;
 			}
 			.btn-secondary {
-				background: rgba(var(--gray-light), 80%);
-				color: rgb(var(--gray-dark));
-				border: 1px solid var(--border-subtle);
+				background: var(--bg-surface);
+				color: #cbd5e1;
+				border: 1px solid var(--border-light);
 			}
 			.btn-secondary:hover {
-				background: rgba(var(--gray-light), 100%);
+				background: var(--bg-card);
+				color: #f8fafc;
 			}
 			.pdf-frame-wrapper {
 				width: 100%;
 				height: clamp(480px, 75vh, 850px);
 				border-radius: 12px;
 				overflow: hidden;
-				box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.08);
-				border: 1px solid var(--border-subtle);
-				background: #fff;
+				box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.4);
+				border: 1px solid var(--border-light);
+				background: #111622;
 			}
 			@media (max-width: 640px) {
 				.resume-container {
