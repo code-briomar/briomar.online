@@ -1,6 +1,6 @@
 /*
-  briomar.online - Default Dark Mode Technical Editorial Stylesheet
-  Strict dark mode only. Obsidian & Slate developer aesthetic.
+  briomar.online - Pitch Black Neutral Minimalist Stylesheet
+  True black (OLED #000000) developer theme. Zero blue tint.
 */
 
 *,
@@ -12,20 +12,20 @@
 :root {
 	--accent: #3b82f6;
 	--accent-hover: #60a5fa;
-	--accent-subtle: rgba(59, 130, 246, 0.15);
-	--bg-primary: #0a0d14;
-	--bg-surface: #111622;
-	--bg-card: #151b28;
-	--bg-card-hover: #1a2233;
-	--bg-input: #0e131d;
-	--black: 248, 250, 252;
-	--gray-dark: 203, 213, 225;
-	--gray: 148, 163, 184;
-	--gray-light: 30, 41, 59;
-	--border-subtle: rgba(255, 255, 255, 0.08);
-	--border-light: rgba(255, 255, 255, 0.12);
-	--border-focus: #3b82f6;
-	--box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.5), 0 2px 8px -1px rgba(0, 0, 0, 0.4);
+	--accent-subtle: rgba(255, 255, 255, 0.08);
+	--bg-primary: #000000;
+	--bg-surface: #0c0c0c;
+	--bg-card: #121212;
+	--bg-card-hover: #181818;
+	--bg-input: #0a0a0a;
+	--black: 255, 255, 255;
+	--gray-dark: 212, 212, 212;
+	--gray: 163, 163, 163;
+	--gray-light: 26, 26, 26;
+	--border-subtle: #222222;
+	--border-light: #2d2d2d;
+	--border-focus: #555555;
+	--box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.8), 0 2px 8px -1px rgba(0, 0, 0, 0.6);
 	color-scheme: dark;
 }
 
@@ -103,13 +103,13 @@ b {
 }
 
 a {
-	color: var(--accent);
+	color: #60a5fa;
 	text-decoration: none;
 	transition: color 0.15s ease;
 }
 
 a:hover {
-	color: var(--accent-hover);
+	color: #93c5fd;
 }
 
 p {
@@ -141,7 +141,7 @@ table {
 
 th, td {
 	padding: 0.6em 0.8em;
-	border: 1px solid var(--border-light);
+	border: 1px solid var(--border-subtle);
 	text-align: left;
 }
 
@@ -165,12 +165,12 @@ video {
 
 code {
 	padding: 0.2em 0.4em;
-	background-color: rgba(255, 255, 255, 0.08);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	background-color: #171717;
+	border: 1px solid #282828;
 	border-radius: 5px;
 	font-size: 0.88em;
 	font-family: "SF Mono", Menlo, Consolas, Monaco, monospace;
-	color: #93c5fd;
+	color: #e5e5e5;
 }
 
 pre {
@@ -180,10 +180,10 @@ pre {
 	-webkit-overflow-scrolling: touch;
 	font-size: 0.85rem;
 	line-height: 1.55;
-	background: #080b10;
-	color: #e2e8f0;
-	border: 1px solid var(--border-light);
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+	background: #080808;
+	color: #e5e5e5;
+	border: 1px solid #222222;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9);
 	margin: 1.5em 0;
 }
 
@@ -194,13 +194,13 @@ pre > code {
 }
 
 blockquote {
-	border-left: 3px solid var(--accent);
+	border-left: 3px solid #555555;
 	padding: 0.8em 1.2em;
 	margin: 1.5em 0;
 	font-size: 0.98em;
-	background: var(--accent-subtle);
+	background: #0d0d0d;
 	border-radius: 0 8px 8px 0;
-	color: #cbd5e1;
+	color: #d4d4d4;
 }
 
 blockquote p {
