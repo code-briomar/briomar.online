@@ -1,0 +1,56 @@
+[
+  {
+    "id": "thread-action-call-ussd",
+    "channel": "telephony",
+    "title": "Does MpesaQuick need root access to dial USSD directly?",
+    "author": {
+      "name": "Mark K.",
+      "handle": "@mark_dev",
+      "avatarColor": "#2563eb"
+    },
+    "date": "Oct 9, 2026",
+    "question": "In Figure 2 you showed the SIM dialog appearing automatically. Does Android allow apps to dial *334# directly without opening the phone dialer app, or does it require special permissions or root access?",
+    "reply": {
+      "author": "briomar",
+      "isAuthor": true,
+      "date": "Oct 9, 2026",
+      "content": "No root required. It uses Android's native `ACTION_CALL` intent with encoded `#` URI fragments (`Uri.encode('#')`). This triggers the telephony modem directly, so it opens the carrier SIM prompt without ever touching or showing the phone dialer keypad. Standard `CALL_PHONE` permission is the only requirement."
+    }
+  },
+  {
+    "id": "thread-startup-coroutine",
+    "channel": "performance",
+    "title": "Why not load the 24 SDKs in a background coroutine instead?",
+    "author": {
+      "name": "David O.",
+      "handle": "@d_otieno",
+      "avatarColor": "#16a34a"
+    },
+    "date": "Oct 9, 2026",
+    "question": "Why didn't the M-PESA team just initialize Dynatrace and Adjust inside Dispatchers.IO in Kotlin coroutines instead of blocking the main thread during startup?",
+    "reply": {
+      "author": "briomar",
+      "isAuthor": true,
+      "date": "Oct 9, 2026",
+      "content": "Many enterprise SDKs (like Alipay/Griver and telemetry agents) require synchronous UI Context during Application `onCreate()`. Safaricom is using `androidx.startup.InitializationProvider` which executes synchronously before the first Activity even boots. Migrating them to asynchronous background workers requires refactoring their startup lifecycle."
+    }
+  },
+  {
+    "id": "thread-future-teardowns",
+    "channel": "suggestions",
+    "title": "Suggesting a teardown: Equity Bank or KCB next?",
+    "author": {
+      "name": "Brian M.",
+      "handle": "@bm_ke",
+      "avatarColor": "#9333ea"
+    },
+    "date": "Oct 9, 2026",
+    "question": "Great teardown! Are you planning to do a similar reverse-engineering audit on the Equity Mobile or KCB Bank app?",
+    "reply": {
+      "author": "briomar",
+      "isAuthor": true,
+      "date": "Oct 9, 2026",
+      "content": "Yes! Both Equity Mobile and KCB are currently in our testing queue for upcoming teardowns in this series once Parts 2 and 3 of the M-PESA audit are published."
+    }
+  }
+]
