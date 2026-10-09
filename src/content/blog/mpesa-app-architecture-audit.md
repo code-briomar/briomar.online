@@ -2,7 +2,7 @@
 title: "The 3-Second Freeze: Why the M-PESA App Takes So Long to Open (Part 1)"
 description: "A look inside the decompiled bytecode of the official Safaricom M-PESA app: the hardcoded 3,000ms CountDownTimer in SplashActivity, 24 synchronous main-thread providers, and how we built an instant offline trigger."
 pubDate: 2026-10-09
-heroImage: "../../assets/blog-placeholder-1.jpg"
+heroImage: "../../assets/mpesa-audit-banner.jpg"
 ---
 
 Every time you tap the M-PESA app icon on your phone, you wait.
