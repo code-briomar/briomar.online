@@ -139,9 +139,9 @@ After uncovering these architectural bottlenecks, I set out to answer a simple q
 That resulted in **`MpesaQuick`**, an experimental companion prototype built with modern Android engineering:
 
 <div style="text-align: center; margin: 2em 0;">
-  <img src="/images/mpesaquick-demo-blurred.png" alt="MpesaQuick Prototype Interface" style="max-width: 320px; border-radius: 18px; box-shadow: var(--box-shadow); border: 1px solid rgba(var(--gray), 25%); display: inline-block;" />
+  <img src="/images/transaction_demo.webp" alt="MpesaQuick Live USSD Initiation" style="max-width: 320px; border-radius: 18px; box-shadow: var(--box-shadow); border: 1px solid rgba(var(--gray), 25%); display: inline-block;" />
   <p style="font-size: 0.85em; color: rgb(var(--gray)); margin-top: 0.8em;">
-    <em>Figure 1: MpesaQuick running on-device (phone numbers and names blurred for privacy).</em>
+    <em>Figure 1: Live screen capture initiating an offline transaction on a Samsung test device (recipient phone numbers and contacts blurred for privacy). Notice the total fee reflection ("Pay kes. 157 with") and automated navigation straight to the M-PESA PIN prompt.</em>
   </p>
 </div>
 
