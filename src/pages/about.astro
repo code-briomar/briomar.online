@@ -235,7 +235,7 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 				gap: 1.25rem;
 			}
 
-			/* Discord-Style Thread Card */
+			/* Thread Card */
 			.thread-card {
 				background: #0d0d0d;
 				border: 1px solid #222222;
@@ -335,7 +335,7 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 				margin: 0;
 			}
 
-			/* Author Reply Box (Discord Staff Style) */
+			/* Author Reply Box */
 			.author-reply-box {
 				background: #121212;
 				border-left: 3px solid #ffffff;
@@ -404,12 +404,12 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 				<h1 class="page-title">briomar.site</h1>
 			</section>
 
-			<!-- Thread & Message Composer -->
+			<!-- Message Composer -->
 			<section class="composer-card">
 				<div class="card-header">
-					<h2 class="card-title">💬 Send a Message or Start a Thread</h2>
+					<h2 class="card-title">Send a Message</h2>
 					<p class="card-desc">
-						Got technical questions, feedback, or a teardown suggestion? Type your message below. I receive an email notification for every message (your email is kept completely private and never shown). When I reply, selected discussions are published here as public threads (similar to Discord forum threads), while others stay private.
+						Got a question, feedback, or a teardown suggestion? Send a message below. I receive an email notification directly. Your email is kept private and never shown on this site.
 					</p>
 				</div>
 
@@ -462,7 +462,7 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 					<div class="consent-group">
 						<input type="checkbox" id="public-consent" checked />
 						<label for="public-consent" class="consent-label">
-							Allow this discussion and author response to appear as a public thread below (like Discord threads)
+							Allow this message and reply to be published as a public thread
 						</label>
 					</div>
 
@@ -477,11 +477,11 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 			</section>
 
 			<!-- Public Threads Feed -->
-			<section class="threads-section">
+			<section class="threads-section" id="threads-section" style={threadsData.length === 0 ? "display: none;" : ""}>
 				<div class="threads-heading-row">
 					<h2 class="threads-title">Discussion Threads</h2>
 					<span class="threads-count" id="thread-count-badge">
-						{threadsData.length} Public Threads
+						{threadsData.length} {threadsData.length === 1 ? 'Thread' : 'Threads'}
 					</span>
 				</div>
 
@@ -566,9 +566,14 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 				// Render pending user threads on top
 				function renderPendingThreads() {
 					if (!threadsContainer) return;
+					const threadsSection = document.getElementById('threads-section');
 
 					// Remove any previously inserted pending DOM nodes
 					document.querySelectorAll('.thread-card.pending').forEach((el) => el.remove());
+
+					if (pendingThreads.length > 0 && threadsSection) {
+						threadsSection.style.display = 'block';
+					}
 
 					pendingThreads.forEach((pt) => {
 						const card = document.createElement('article');
@@ -576,7 +581,7 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 						card.innerHTML = `
 							<div class="thread-meta-bar">
 								<span class="channel-tag">#${pt.channel}</span>
-								<span class="pending-badge">Pending Author Review</span>
+								<span class="pending-badge">Pending Review</span>
 								<span class="message-date">${pt.date}</span>
 							</div>
 							<h3 class="thread-topic-title">${escapeHTML(pt.title)}</h3>
@@ -648,7 +653,7 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 
 						if (response.ok && result.success !== false) {
 							showStatus(
-								'✓ Message sent! An email notification has been dispatched to briomar. If selected, your thread will appear below once answered.',
+								'Message sent. An email notification has been dispatched. If selected, your thread will appear below once answered.',
 								'success'
 							);
 
@@ -677,7 +682,7 @@ const pageDescription = 'Direct messages and public engineering discussion threa
 					} catch (err: any) {
 						// Fallback: If edge function is unavailable (e.g. local preview), store locally and confirm
 						showStatus(
-							'✓ Message recorded! Your message was received and an email alert will be processed.',
+							'Message received. Your message was recorded.',
 							'success'
 						);
 
