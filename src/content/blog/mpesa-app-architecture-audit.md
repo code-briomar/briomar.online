@@ -5,7 +5,7 @@ pubDate: 2026-10-09
 heroImage: "../../assets/mpesa-audit-banner.jpg"
 ---
 
-Every time you open the M-PESA app, you wait. You stare at the green logo screen while seconds tick by. Most people blame their phone or poor reception (*"simu imezeeka"*).
+Every time you open the M-PESA app, you wait. You stare at the green logo screen while seconds tick by. Anyone waiting in a supermarket queue knows the frustration of feeling delayed by the person in front paying at the till, but that person is not the problem. Most people blame their phone or poor reception (*"simu imezeeka"*).
 
 We decompiled the official Safaricom M-PESA Super App (`v5.2.0.0`) to see what actually happens during startup. The result: the startup delay isn't your phone or a slow cell tower. It is programmed directly into the app.
 
