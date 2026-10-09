@@ -6,23 +6,31 @@ interface Props {
 const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 ---
 
-<section class="comments-rating-container" id="feedback-section">
+<section class="feedback-module" id="feedback">
 	<div class="feedback-card">
-		<!-- Rating Section -->
-		<div class="rating-header">
-			<h3>Rate this Teardown</h3>
-			<p class="rating-subtitle">How insightful was this deep-dive? (1 = Poor, 10 = Masterpiece)</p>
-		</div>
+		<!-- Rating Row -->
+		<div class="rating-strip" data-post-id={postId}>
+			<div class="rating-strip-header">
+				<div class="rating-label-group">
+					<span class="rating-heading">Article Rating</span>
+					<span class="rating-sub">How would you rate this teardown from 1 to 10?</span>
+				</div>
+				<div class="rating-score-badge">
+					<span class="star-icon">★</span>
+					<span class="score-num" id="avg-score-display">—</span>
+					<span class="score-scale">/ 10</span>
+					<span class="score-count" id="total-votes-display">(0 ratings)</span>
+				</div>
+			</div>
 
-		<div class="rating-widget" data-post-id={postId}>
-			<div class="score-pills" role="radiogroup" aria-label="Rating from 1 to 10">
+			<div class="segmented-rating" role="radiogroup" aria-label="Rating from 1 to 10">
 				{
 					[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
 						<button
 							type="button"
-							class="score-pill"
+							class="seg-pill"
 							data-score={num}
-							aria-label={`Rate ${num} out of 10`}
+							aria-label={`Rate ${num} of 10`}
 						>
 							{num}
 						</button>
@@ -30,79 +38,75 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 				}
 			</div>
 
-			<div class="rating-feedback-row">
-				<div class="user-vote-status" id="user-vote-status">
-					Select a score above to submit your rating
-				</div>
-				<div class="aggregate-score">
-					<span class="star-icon">★</span>
-					<strong id="avg-score-display">—</strong> / 10
-					<span class="total-votes" id="total-votes-display">(0 ratings)</span>
-				</div>
+			<div class="vote-feedback" id="user-vote-status">
+				Tap a score to rate this post
 			</div>
 		</div>
 
-		<hr class="section-divider" />
+		<div class="strip-divider"></div>
 
-		<!-- Comments Section -->
-		<div class="comments-section">
-			<div class="comments-header">
-				<h3 id="comments-count-title">Discussion & Comments (0)</h3>
-				<span class="comments-badge">Tech Feedback</span>
+		<!-- Discussion Section -->
+		<div class="discussion-container">
+			<div class="discussion-header">
+				<div class="discussion-title-group">
+					<h3 class="discussion-title">Discussion</h3>
+					<span class="comment-count-badge" id="comments-count-badge">0</span>
+				</div>
+				<span class="peer-review-tag">Peer Review</span>
 			</div>
 
-			<!-- Comment Form -->
-			<form id="comment-form" class="comment-form">
-				<div class="form-row-grid">
-					<div class="input-group">
-						<label for="comment-author">Name / Handle *</label>
+			<!-- Comment Composer Form -->
+			<form id="comment-form" class="comment-composer">
+				<div class="composer-grid">
+					<div class="field-wrap">
+						<label for="comment-author">Name / Handle</label>
 						<input
 							type="text"
 							id="comment-author"
-							placeholder="e.g. Kelvin Mutua (@kelvin_ke)"
+							placeholder="e.g. Kelvin Mutua (@kelvin)"
 							required
 							maxlength="50"
 						/>
 					</div>
-					<div class="input-group">
-						<label for="comment-score">Your Score (Optional)</label>
+					<div class="field-wrap">
+						<label for="comment-score">Rating (Optional)</label>
 						<select id="comment-score">
-							<option value="">No rating attached</option>
-							<option value="10">10 / 10 — Must Read 🔥</option>
-							<option value="9">9 / 10 — Excellent</option>
-							<option value="8">8 / 10 — Great Deep-Dive</option>
-							<option value="7">7 / 10 — Good</option>
-							<option value="6">6 / 10 — Average</option>
-							<option value="5">5 / 10 — Fair</option>
-							<option value="4">4 / 10 — Needs Work</option>
-							<option value="3">3 / 10 — Disagree</option>
-							<option value="2">2 / 10 — Poor</option>
-							<option value="1">1 / 10 — Inaccurate</option>
+							<option value="">No rating</option>
+							<option value="10">10 / 10</option>
+							<option value="9">9 / 10</option>
+							<option value="8">8 / 10</option>
+							<option value="7">7 / 10</option>
+							<option value="6">6 / 10</option>
+							<option value="5">5 / 10</option>
+							<option value="4">4 / 10</option>
+							<option value="3">3 / 10</option>
+							<option value="2">2 / 10</option>
+							<option value="1">1 / 10</option>
 						</select>
 					</div>
 				</div>
 
-				<div class="input-group">
-					<label for="comment-body">Comment *</label>
+				<div class="field-wrap">
+					<label for="comment-body">Comment</label>
 					<textarea
 						id="comment-body"
 						rows="3"
-						placeholder="Share your thoughts, systems insights, or counter-arguments..."
+						placeholder="Share your benchmarks, system insights, or questions..."
 						required
 						maxlength="1000"></textarea>
 				</div>
 
-				<div class="form-actions">
-					<button type="submit" class="submit-btn" id="submit-comment-btn">
+				<div class="composer-actions">
+					<button type="submit" class="submit-comment-btn" id="submit-comment-btn">
 						Post Comment
 					</button>
 				</div>
 			</form>
 
-			<!-- Comments List -->
-			<div class="comments-list" id="comments-list">
-				<div class="empty-comments" id="empty-comments">
-					<p>No comments yet. Have insights, benchmarks, or feedback? Share your comment above!</p>
+			<!-- Comments Feed -->
+			<div class="comments-feed" id="comments-list">
+				<div class="empty-feed" id="empty-comments">
+					<p>No comments yet. Have thoughts or benchmarks? Share your insight above.</p>
 				</div>
 			</div>
 		</div>
@@ -110,269 +114,281 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 </section>
 
 <style>
-	.comments-rating-container {
-		margin-top: 3.5em;
-		padding-top: 2em;
-		border-top: 1px solid rgba(var(--gray), 20%);
+	.feedback-module {
+		margin-top: 3.5rem;
+		padding-top: 2rem;
+		border-top: 1px solid var(--border-subtle);
 	}
 
 	.feedback-card {
-		background: rgba(var(--gray-light), 25%);
-		border: 1px solid rgba(var(--gray), 20%);
-		border-radius: 16px;
-		padding: 2em;
-		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+		background: #ffffff;
+		border: 1px solid var(--border-subtle);
+		border-radius: 12px;
+		padding: 1.75rem;
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
 	}
 
-	.rating-header h3 {
-		margin: 0 0 0.3em 0;
-		font-size: 1.4em;
+	.rating-strip-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 1rem;
+		margin-bottom: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.rating-label-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.rating-heading {
+		font-size: 1.05rem;
+		font-weight: 700;
 		color: rgb(var(--black));
 	}
 
-	.rating-subtitle {
-		margin: 0 0 1.2em 0;
-		font-size: 0.92em;
+	.rating-sub {
+		font-size: 0.85rem;
 		color: rgb(var(--gray));
 	}
 
-	.rating-widget {
-		display: flex;
-		flex-direction: column;
-		gap: 1em;
+	.rating-score-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.95rem;
+		background: rgba(var(--gray-light), 80%);
+		padding: 0.35rem 0.75rem;
+		border-radius: 6px;
+		border: 1px solid var(--border-subtle);
 	}
 
-	.score-pills {
+	.star-icon {
+		color: #f59e0b;
+		font-size: 1.05rem;
+	}
+
+	.score-num {
+		font-weight: 700;
+		color: rgb(var(--black));
+	}
+
+	.score-scale {
+		color: rgb(var(--gray));
+		font-size: 0.85rem;
+	}
+
+	.score-count {
+		color: rgb(var(--gray));
+		font-size: 0.82rem;
+		margin-left: 0.2rem;
+	}
+
+	.segmented-rating {
 		display: grid;
 		grid-template-columns: repeat(10, 1fr);
-		gap: 0.5em;
-	}
-
-	@media (max-width: 640px) {
-		.score-pills {
-			grid-template-columns: repeat(5, 1fr);
-		}
-	}
-
-	.score-pill {
-		padding: 0.65em 0;
-		border-radius: 10px;
-		border: 1px solid rgba(var(--gray), 30%);
+		gap: 0.35rem;
 		background: rgba(var(--gray-light), 60%);
-		color: rgb(var(--black));
-		font-weight: 700;
-		font-size: 1em;
+		padding: 0.35rem;
+		border-radius: 8px;
+		border: 1px solid var(--border-subtle);
+	}
+
+	.seg-pill {
+		border: none;
+		background: transparent;
+		padding: 0.5rem 0;
+		font-size: 0.88rem;
+		font-weight: 600;
+		color: rgb(var(--gray-dark));
+		border-radius: 5px;
 		cursor: pointer;
-		transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+		transition: all 0.15s ease;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
-	.score-pill:hover {
-		transform: translateY(-2px);
-		border-color: var(--accent);
-		background: rgba(var(--accent-rgb, 37, 99, 235), 0.15);
-		color: var(--accent);
+	.seg-pill:hover {
+		background: #ffffff;
+		color: rgb(var(--black));
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 	}
 
-	.score-pill.active {
-		background: var(--accent);
-		color: white;
-		border-color: var(--accent);
-		box-shadow: 0 4px 12px rgba(var(--accent-rgb, 37, 99, 235), 0.35);
-		transform: scale(1.05);
+	.seg-pill.active {
+		background: #0f172a;
+		color: #ffffff;
+		box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
 	}
 
-	.rating-feedback-row {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 0.8em;
-		font-size: 0.92em;
+	.vote-feedback {
+		margin-top: 0.6rem;
+		font-size: 0.82rem;
+		color: rgb(var(--gray));
+		transition: color 0.2s ease;
 	}
 
-	.user-vote-status {
-		color: rgb(var(--gray-dark));
-		font-weight: 500;
-	}
-
-	.user-vote-status.voted {
+	.vote-feedback.voted {
 		color: #059669;
 		font-weight: 600;
 	}
 
-	.aggregate-score {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4em;
-		font-size: 1.05em;
-		color: rgb(var(--black));
+	.strip-divider {
+		height: 1px;
+		background: var(--border-subtle);
+		margin: 1.75rem 0;
 	}
 
-	.star-icon {
-		color: #f59e0b;
-		font-size: 1.2em;
-	}
-
-	.total-votes {
-		color: rgb(var(--gray));
-		font-size: 0.88em;
-	}
-
-	.section-divider {
-		margin: 2em 0;
-		border: 0;
-		border-top: 1px solid rgba(var(--gray), 20%);
-	}
-
-	.comments-header {
+	.discussion-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 1.4em;
+		margin-bottom: 1.25rem;
 	}
 
-	.comments-header h3 {
+	.discussion-title-group {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+	}
+
+	.discussion-title {
+		font-size: 1.15rem;
+		font-weight: 700;
+		color: rgb(var(--black));
 		margin: 0;
-		font-size: 1.3em;
-		color: rgb(var(--black));
 	}
 
-	.comments-badge {
-		font-size: 0.8em;
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.05em;
-		padding: 0.25em 0.7em;
+	.comment-count-badge {
+		font-size: 0.75rem;
+		font-weight: 700;
+		padding: 0.15rem 0.5rem;
 		border-radius: 999px;
-		background: rgba(var(--accent-rgb, 37, 99, 235), 0.12);
-		color: var(--accent);
+		background: rgba(var(--gray-light), 90%);
+		border: 1px solid var(--border-subtle);
+		color: rgb(var(--gray-dark));
 	}
 
-	.comment-form {
-		display: flex;
-		flex-direction: column;
-		gap: 1.2em;
-		background: rgba(255, 255, 255, 0.6);
-		padding: 1.4em;
-		border-radius: 12px;
-		border: 1px solid rgba(var(--gray), 20%);
-		margin-bottom: 2em;
-	}
-
-	.form-row-grid {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1.2em;
-	}
-
-	@media (max-width: 640px) {
-		.form-row-grid {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	.input-group {
-		display: flex;
-		flex-direction: column;
-		gap: 0.4em;
-	}
-
-	.input-group label {
-		font-size: 0.88em;
+	.peer-review-tag {
+		font-size: 0.72rem;
 		font-weight: 600;
-		color: rgb(var(--black));
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: rgb(var(--gray));
 	}
 
-	.input-group input,
-	.input-group select,
-	.input-group textarea {
-		padding: 0.7em 0.9em;
+	.comment-composer {
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		background: rgba(var(--gray-light), 40%);
+		border: 1px solid var(--border-subtle);
+		padding: 1.1rem;
 		border-radius: 8px;
-		border: 1px solid rgba(var(--gray), 30%);
+		margin-bottom: 1.5rem;
+	}
+
+	.composer-grid {
+		display: grid;
+		grid-template-columns: 2fr 1fr;
+		gap: 0.85rem;
+	}
+
+	.field-wrap {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+	}
+
+	.field-wrap label {
+		font-size: 0.8rem;
+		font-weight: 600;
+		color: rgb(var(--gray-dark));
+	}
+
+	.field-wrap input,
+	.field-wrap select,
+	.field-wrap textarea {
+		padding: 0.55rem 0.75rem;
+		border-radius: 6px;
+		border: 1px solid rgba(var(--gray), 25%);
 		background: #ffffff;
 		font-family: inherit;
-		font-size: 0.95em;
+		font-size: 0.9rem;
 		color: rgb(var(--black));
 		outline: none;
 		transition: border-color 0.15s ease, box-shadow 0.15s ease;
 	}
 
-	.input-group input:focus,
-	.input-group select:focus,
-	.input-group textarea:focus {
-		border-color: var(--accent);
-		box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 37, 99, 235), 0.15);
+	.field-wrap input:focus,
+	.field-wrap select:focus,
+	.field-wrap textarea:focus {
+		border-color: #0f172a;
+		box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.12);
 	}
 
-	.form-actions {
+	.composer-actions {
 		display: flex;
 		justify-content: flex-end;
 	}
 
-	.submit-btn {
-		background: var(--accent);
-		color: white;
+	.submit-comment-btn {
+		background: #0f172a;
+		color: #ffffff;
 		border: none;
-		padding: 0.7em 1.6em;
-		border-radius: 8px;
+		padding: 0.55rem 1.15rem;
+		border-radius: 6px;
+		font-size: 0.88rem;
 		font-weight: 600;
-		font-size: 0.95em;
 		cursor: pointer;
-		transition: background 0.15s ease, transform 0.1s ease;
+		transition: background 0.15s ease;
 	}
 
-	.submit-btn:hover {
-		background: var(--accent-dark, #1d4ed8);
-		transform: translateY(-1px);
+	.submit-comment-btn:hover {
+		background: #1e293b;
 	}
 
-	.submit-btn:active {
-		transform: translateY(0);
-	}
-
-	.comments-list {
+	.comments-feed {
 		display: flex;
 		flex-direction: column;
-		gap: 1.2em;
+		gap: 1rem;
 	}
 
-	.empty-comments {
+	.empty-feed {
+		padding: 1.5rem 1rem;
 		text-align: center;
-		padding: 2.2em 1.2em;
-		color: rgb(var(--gray));
-		font-size: 0.95em;
 		background: rgba(var(--gray-light), 30%);
-		border: 1px dashed rgba(var(--gray), 30%);
-		border-radius: 12px;
+		border: 1px dashed var(--border-subtle);
+		border-radius: 8px;
+		color: rgb(var(--gray));
+		font-size: 0.88rem;
 	}
 
-	.empty-comments p {
+	.empty-feed p {
 		margin: 0;
 	}
 
 	.comment-card {
 		display: flex;
-		gap: 1em;
-		padding: 1.2em;
-		border-radius: 12px;
+		gap: 0.85rem;
+		padding: 1rem;
+		border-radius: 8px;
 		background: #ffffff;
-		border: 1px solid rgba(var(--gray), 20%);
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+		border: 1px solid var(--border-subtle);
 	}
 
 	.comment-avatar {
-		width: 40px;
-		height: 40px;
-		border-radius: 50%;
+		width: 34px;
+		height: 34px;
+		border-radius: 6px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		color: white;
 		font-weight: 700;
-		font-size: 0.95em;
+		font-size: 0.82rem;
 		flex-shrink: 0;
 	}
 
@@ -380,62 +396,75 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		gap: 0.4em;
+		gap: 0.3rem;
 	}
 
 	.comment-meta {
 		display: flex;
 		align-items: center;
-		gap: 0.6em;
+		gap: 0.5rem;
 		flex-wrap: wrap;
-		font-size: 0.88em;
+		font-size: 0.82rem;
 	}
 
 	.comment-name {
+		font-weight: 600;
 		color: rgb(var(--black));
 	}
 
 	.comment-handle {
 		color: rgb(var(--gray));
-		font-size: 0.92em;
 	}
 
 	.comment-date {
 		color: rgb(var(--gray));
-		font-size: 0.85em;
 		margin-left: auto;
+		font-size: 0.78rem;
 	}
 
 	.comment-rating-tag {
-		background: rgba(16, 185, 129, 0.12);
-		color: #059669;
-		padding: 0.15em 0.55em;
-		border-radius: 6px;
-		font-size: 0.82em;
-		font-weight: 700;
+		background: rgba(16, 185, 129, 0.1);
+		color: #047857;
+		padding: 0.1rem 0.45rem;
+		border-radius: 4px;
+		font-size: 0.75rem;
+		font-weight: 600;
 	}
 
 	.comment-text {
 		margin: 0;
-		font-size: 0.95em;
-		line-height: 1.55;
+		font-size: 0.92rem;
+		line-height: 1.5;
 		color: rgb(var(--gray-dark));
 	}
 
-	.comment-text code {
-		padding: 0.15em 0.35em;
-		border-radius: 4px;
-		background: rgba(var(--gray-light), 80%);
-		font-size: 0.9em;
+	@media (max-width: 640px) {
+		.feedback-card {
+			padding: 1.15rem;
+		}
+
+		.segmented-rating {
+			gap: 0.2rem;
+			padding: 0.25rem;
+		}
+
+		.seg-pill {
+			font-size: 0.8rem;
+			padding: 0.45rem 0;
+		}
+
+		.composer-grid {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>
 
 <script>
-	function setupCommentsAndRatings() {
-		const ratingContainer = document.querySelector('.rating-widget') as HTMLElement;
-		if (!ratingContainer) return;
+	function setupFeedbackModule() {
+		const ratingStrip = document.querySelector('.rating-strip') as HTMLElement;
+		if (!ratingStrip) return;
 
-		const postId = ratingContainer.dataset.postId || 'mpesa-audit';
+		const postId = ratingStrip.dataset.postId || 'mpesa-audit';
 		const storageRatingKey = `briomar_rating_${postId}`;
 		const storageCommentsKey = `briomar_comments_${postId}`;
 		const storageVotesKey = `briomar_votes_agg_${postId}`;
@@ -443,15 +472,12 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		const statusEl = document.getElementById('user-vote-status');
 		const avgDisplay = document.getElementById('avg-score-display');
 		const totalDisplay = document.getElementById('total-votes-display');
-		const pills = document.querySelectorAll('.score-pill');
+		const pills = document.querySelectorAll('.seg-pill');
 
-		// Load stored votes aggregate if any (starts at 0)
 		let aggData = { total: 0, sum: 0 };
 		try {
 			const savedAgg = localStorage.getItem(storageVotesKey);
-			if (savedAgg) {
-				aggData = JSON.parse(savedAgg);
-			}
+			if (savedAgg) aggData = JSON.parse(savedAgg);
 		} catch (e) {
 			console.error(e);
 		}
@@ -470,7 +496,6 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 
 		updateAggDisplay();
 
-		// Check if user previously voted
 		const savedRating = localStorage.getItem(storageRatingKey);
 		if (savedRating) {
 			const savedVal = parseInt(savedRating, 10);
@@ -490,17 +515,15 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 				highlightPill(score);
 
 				if (statusEl) {
-					statusEl.textContent = `★ You rated this ${score}/10! Thanks for the feedback.`;
+					statusEl.textContent = `★ You rated this ${score}/10. Thanks for your feedback!`;
 					statusEl.classList.add('voted');
 				}
 
-				// Also auto-select in comment dropdown if empty
 				const commentScoreSelect = document.getElementById('comment-score') as HTMLSelectElement;
 				if (commentScoreSelect && !commentScoreSelect.value) {
 					commentScoreSelect.value = score.toString();
 				}
 
-				// Update aggregate
 				if (!prevRating) {
 					aggData.total += 1;
 					aggData.sum += score;
@@ -527,13 +550,12 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 			});
 		}
 
-		// Comment submission logic
+		// Comment Submission
 		const form = document.getElementById('comment-form') as HTMLFormElement;
 		const commentsList = document.getElementById('comments-list');
 		const emptyCommentsEl = document.getElementById('empty-comments');
-		const countTitle = document.getElementById('comments-count-title');
+		const countBadge = document.getElementById('comments-count-badge');
 
-		// Load stored user comments (starts at 0)
 		let userComments: Array<{
 			name: string;
 			handle: string;
@@ -544,24 +566,20 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 
 		try {
 			const raw = localStorage.getItem(storageCommentsKey);
-			if (raw) {
-				userComments = JSON.parse(raw);
-			}
+			if (raw) userComments = JSON.parse(raw);
 		} catch (e) {
 			console.error(e);
 		}
 
 		function updateCommentsCount() {
 			const total = userComments.length;
-			if (countTitle) {
-				countTitle.textContent = `Discussion & Comments (${total})`;
-			}
+			if (countBadge) countBadge.textContent = total.toString();
 			if (emptyCommentsEl) {
 				emptyCommentsEl.style.display = total === 0 ? 'block' : 'none';
 			}
 		}
 
-		function renderUserComment(c: {
+		function renderComment(c: {
 			name: string;
 			handle: string;
 			score: string;
@@ -577,8 +595,8 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 				.join('')
 				.toUpperCase() || 'U';
 
-			const colors = ['#2563eb', '#7c3aed', '#059669', '#d97706', '#db2777', '#0891b2'];
-			const color = colors[Math.abs(c.name.length) % colors.length];
+			const palette = ['#0f172a', '#334155', '#475569', '#1e293b'];
+			const color = palette[Math.abs(c.name.length) % palette.length];
 
 			const article = document.createElement('article');
 			article.className = 'comment-card';
@@ -586,7 +604,7 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 				<div class="comment-avatar" style="background: ${color};">${initials}</div>
 				<div class="comment-content">
 					<div class="comment-meta">
-						<strong class="comment-name">${escapeHtml(c.name)}</strong>
+						<span class="comment-name">${escapeHtml(c.name)}</span>
 						${c.handle ? `<span class="comment-handle">${escapeHtml(c.handle)}</span>` : ''}
 						<span class="comment-date">${escapeHtml(c.date)}</span>
 						${c.score ? `<span class="comment-rating-tag">★ ${escapeHtml(c.score)}/10</span>` : ''}
@@ -598,8 +616,7 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 			commentsList.appendChild(article);
 		}
 
-		// Render stored real comments on load
-		userComments.forEach((c) => renderUserComment(c));
+		userComments.forEach((c) => renderComment(c));
 		updateCommentsCount();
 
 		if (form) {
@@ -642,7 +659,7 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 					console.error(err);
 				}
 
-				renderUserComment(newComment);
+				renderComment(newComment);
 				updateCommentsCount();
 
 				bodyInput.value = '';
@@ -662,6 +679,6 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		}
 	}
 
-	setupCommentsAndRatings();
-	document.addEventListener('astro:page-load', setupCommentsAndRatings);
+	setupFeedbackModule();
+	document.addEventListener('astro:page-load', setupFeedbackModule);
 </script>

@@ -15,92 +15,172 @@ const posts = (await getCollection('blog')).sort(
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={`Blog • ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
+			.blog-container {
+				width: 100%;
+				max-width: 760px;
+				margin: 0 auto;
+				padding: 2rem 1.25rem 4rem;
 			}
-			ul {
+
+			.page-header {
+				margin-bottom: 2rem;
+			}
+
+			.page-title {
+				font-size: clamp(2rem, 5vw, 2.5rem);
+				font-weight: 800;
+				letter-spacing: -0.025em;
+				margin-bottom: 0.3em;
+				color: rgb(var(--black));
+			}
+
+			.page-subtitle {
+				font-size: 1.05rem;
+				color: rgb(var(--gray));
+				margin: 0;
+			}
+
+			.posts-grid {
 				display: flex;
-				flex-wrap: wrap;
+				flex-direction: column;
 				gap: 2rem;
 				list-style-type: none;
 				margin: 0;
 				padding: 0;
 			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
+
+			.post-item {
 				width: 100%;
 			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
+
+			.post-card-link {
 				display: block;
+				text-decoration: none;
+				border-radius: 12px;
+				overflow: hidden;
+				border: 1px solid var(--border-subtle);
+				background: #ffffff;
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
 			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
+
+			.post-card-link:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.08);
 			}
-			.date {
-				margin: 0;
+
+			.post-image-wrap {
+				width: 100%;
+				aspect-ratio: 16 / 9;
+				overflow: hidden;
+				background: #0f172a;
+			}
+
+			.post-image-wrap img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+				border-radius: 0;
+				transition: transform 0.25s ease;
+			}
+
+			.post-card-link:hover .post-image-wrap img {
+				transform: scale(1.02);
+			}
+
+			.post-details {
+				padding: 1.25rem 1.4rem;
+				display: flex;
+				flex-direction: column;
+				gap: 0.4rem;
+			}
+
+			.post-meta {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+				font-size: 0.82rem;
 				color: rgb(var(--gray));
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
+
+			.post-badge {
+				font-size: 0.75rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				color: var(--accent);
 			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
+
+			.post-card-title {
+				margin: 0;
+				font-size: 1.35rem;
+				font-weight: 700;
+				line-height: 1.3;
+				color: rgb(var(--black));
+				transition: color 0.15s ease;
 			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
+
+			.post-card-link:hover .post-card-title {
+				color: var(--accent);
+			}
+
+			.post-card-desc {
+				margin: 0;
+				font-size: 0.95rem;
+				line-height: 1.55;
+				color: rgb(var(--gray-dark));
+			}
+
+			@media (max-width: 640px) {
+				.blog-container {
+					padding: 1.25rem 1rem 3rem;
 				}
-				ul li {
-					width: 100%;
-					text-align: center;
+
+				.post-details {
+					padding: 1rem;
 				}
-				ul li:first-child {
-					margin-bottom: 0;
+
+				.post-card-title {
+					font-size: 1.15rem;
 				}
-				ul li:first-child .title {
-					font-size: 1.563em;
+
+				.post-card-desc {
+					font-size: 0.9rem;
 				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main class="blog-container">
+			<header class="page-header">
+				<h1 class="page-title">Articles & Teardowns</h1>
+				<p class="page-subtitle">Deep investigations into Android internals, mobile architecture, and systems engineering.</p>
+			</header>
+
 			<section>
-				<ul>
+				<ul class="posts-grid">
 					{posts.map((post) => (
-						<li>
-							<a href={`/blog/${post.id}/`}>
+						<li class="post-item">
+							<a href={`/blog/${post.id}/`} class="post-card-link">
 								{post.data.heroImage && (
-									<Image width={720} height={360} src={post.data.heroImage} alt="" />
+									<div class="post-image-wrap">
+										<Image width={760} height={427} src={post.data.heroImage} alt={post.data.title} />
+									</div>
 								)}
-								<h4 class="title">{post.data.title}</h4>
-								<p class="date">
-									<FormattedDate date={post.data.pubDate} />
-								</p>
+								<div class="post-details">
+									<div class="post-meta">
+										<span class="post-badge">Engineering</span>
+										<span>•</span>
+										<FormattedDate date={post.data.pubDate} />
+									</div>
+									<h2 class="post-card-title">{post.data.title}</h2>
+									{post.data.description && (
+										<p class="post-card-desc">{post.data.description}</p>
+									)}
+								</div>
 							</a>
 						</li>
 					))}

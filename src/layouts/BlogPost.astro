@@ -10,75 +10,157 @@ import CommentsAndRating from '../components/CommentsAndRating.astro';
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const isBlogPost = Astro.url.pathname.includes('/blog/');
 ---
 
 <html lang="en">
 	<head>
 		<BaseHead title={title} description={description} />
 		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
+			.post-container {
+				width: 100%;
+				max-width: 740px;
+				margin: 0 auto;
+				padding: 2rem 1.25rem 4rem;
+			}
+
+			.post-header {
+				margin-bottom: 2rem;
+			}
+
+			.meta-bar {
+				display: flex;
+				align-items: center;
+				gap: 0.6rem;
+				font-size: 0.9rem;
+				color: rgb(var(--gray));
+				margin-bottom: 0.85rem;
+				flex-wrap: wrap;
+			}
+
+			.badge-series {
+				display: inline-flex;
+				align-items: center;
+				font-size: 0.78rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				padding: 0.2rem 0.55rem;
+				border-radius: 4px;
+				background: rgba(37, 99, 235, 0.1);
+				color: var(--accent);
+			}
+
+			.post-title {
+				font-size: clamp(1.85rem, 4.5vw, 2.5rem);
+				font-weight: 800;
+				line-height: 1.22;
+				letter-spacing: -0.025em;
+				color: rgb(var(--black));
+				margin: 0 0 0.85rem 0;
+			}
+
+			.post-description {
+				font-size: 1.1rem;
+				line-height: 1.55;
+				color: rgb(var(--gray-dark));
 				margin: 0;
 			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
+
+			.hero-banner {
+				margin: 1.75rem 0 2.5rem 0;
 				border-radius: 12px;
-				box-shadow: var(--box-shadow);
+				overflow: hidden;
+				border: 1px solid var(--border-subtle);
+				box-shadow: 0 8px 30px -8px rgba(0, 0, 0, 0.08);
 			}
+
+			.hero-banner img {
+				display: block;
+				width: 100%;
+				height: auto;
+				border-radius: 12px;
+			}
+
 			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
 				color: rgb(var(--gray-dark));
+				line-height: 1.75;
+				font-size: 1.05rem;
 			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
+
+			.post-divider {
+				border: none;
+				border-top: 1px solid var(--border-subtle);
+				margin: 2rem 0;
 			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
+
+			@media (max-width: 640px) {
+				.post-container {
+					padding: 1.25rem 1rem 3rem;
+				}
+
+				.post-title {
+					font-size: 1.7rem;
+				}
+
+				.post-description {
+					font-size: 1rem;
+				}
+
+				.prose {
+					font-size: 1rem;
+					line-height: 1.65;
+				}
+
+				.hero-banner {
+					margin: 1.25rem 0 1.75rem 0;
+					border-radius: 8px;
+				}
+
+				.hero-banner img {
+					border-radius: 8px;
+				}
 			}
 		</style>
 	</head>
 
 	<body>
 		<Header />
-		<main>
+		<main class="post-container">
 			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{updatedDate && (
-								<div class="last-updated-on">
-									Last updated on <FormattedDate date={updatedDate} />
-								</div>
-							)}
-						</div>
-						<h1>{title}</h1>
-						<hr />
+				<header class="post-header">
+					<div class="meta-bar">
+						{isBlogPost && (
+							<>
+								<span class="badge-series">Systems Audit</span>
+								<span>•</span>
+							</>
+						)}
+						<FormattedDate date={pubDate} />
+						{updatedDate && (
+							<>
+								<span>•</span>
+								<span>Updated <FormattedDate date={updatedDate} /></span>
+							</>
+						)}
+						<span>•</span>
+						<span>Briane Lomoni</span>
 					</div>
+					<h1 class="post-title">{title}</h1>
+					{description && <p class="post-description">{description}</p>}
+				</header>
+
+				{heroImage && (
+					<div class="hero-banner">
+						<Image width={1020} height={510} src={heroImage} alt={title} />
+					</div>
+				)}
+
+				<div class="prose">
 					<slot />
-					<CommentsAndRating />
 				</div>
+
+				{isBlogPost && <CommentsAndRating />}
 			</article>
 		</main>
 		<Footer />
