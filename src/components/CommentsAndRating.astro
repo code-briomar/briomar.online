@@ -36,8 +36,8 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 				</div>
 				<div class="aggregate-score">
 					<span class="star-icon">★</span>
-					<strong id="avg-score-display">9.4</strong> / 10
-					<span class="total-votes" id="total-votes-display">(42 ratings)</span>
+					<strong id="avg-score-display">—</strong> / 10
+					<span class="total-votes" id="total-votes-display">(0 ratings)</span>
 				</div>
 			</div>
 		</div>
@@ -47,7 +47,7 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		<!-- Comments Section -->
 		<div class="comments-section">
 			<div class="comments-header">
-				<h3 id="comments-count-title">Discussion & Comments (3)</h3>
+				<h3 id="comments-count-title">Discussion & Comments (0)</h3>
 				<span class="comments-badge">Tech Feedback</span>
 			</div>
 
@@ -101,51 +101,9 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 
 			<!-- Comments List -->
 			<div class="comments-list" id="comments-list">
-				<!-- Preloaded Initial Community Comments -->
-				<article class="comment-card initial-comment">
-					<div class="comment-avatar" style="background: #2563eb;">KM</div>
-					<div class="comment-content">
-						<div class="comment-meta">
-							<strong class="comment-name">Kiprono Miller</strong>
-							<span class="comment-handle">@kip_systems</span>
-							<span class="comment-date">2 hours ago</span>
-							<span class="comment-rating-tag">★ 10/10</span>
-						</div>
-						<p class="comment-text">
-							That <code>CountDownTimer(3000L, 1000L)</code> inside <code>SplashActivity.java</code> is hilarious and tragic at the same time. I always wondered why cold booting on my S23 Ultra felt sluggish despite 12GB RAM. Great decompilation breakdown!
-						</p>
-					</div>
-				</article>
-
-				<article class="comment-card initial-comment">
-					<div class="comment-avatar" style="background: #059669;">SN</div>
-					<div class="comment-content">
-						<div class="comment-meta">
-							<strong class="comment-name">Sarah Nderitu</strong>
-							<span class="comment-handle">@nderitu_dev</span>
-							<span class="comment-date">5 hours ago</span>
-							<span class="comment-rating-tag">★ 9/10</span>
-						</div>
-						<p class="comment-text">
-							The USSD formulation to <code>*334#</code> via native dialer intent in MpesaQuick is smart. Dealing with M-PESA app lag during urgent payments is painful. Looking forward to Part 2 on Alibaba Griver!
-						</p>
-					</div>
-				</article>
-
-				<article class="comment-card initial-comment">
-					<div class="comment-avatar" style="background: #d97706;">OO</div>
-					<div class="comment-content">
-						<div class="comment-meta">
-							<strong class="comment-name">Onyango Otieno</strong>
-							<span class="comment-handle">@onyango_ke</span>
-							<span class="comment-date">8 hours ago</span>
-							<span class="comment-rating-tag">★ 9/10</span>
-						</div>
-						<p class="comment-text">
-							24 ContentProviders on the main UI thread during cold boot is insane. Android Vitals literally warns about keeping startup providers under 50ms. Good architectural hygiene check.
-						</p>
-					</div>
-				</article>
+				<div class="empty-comments" id="empty-comments">
+					<p>No comments yet. Have insights, benchmarks, or feedback? Share your comment above!</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -248,17 +206,14 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 	.aggregate-score {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.35em;
-		background: rgba(var(--gray-light), 80%);
-		padding: 0.35em 0.8em;
-		border-radius: 20px;
-		border: 1px solid rgba(var(--gray), 20%);
+		gap: 0.4em;
+		font-size: 1.05em;
 		color: rgb(var(--black));
 	}
 
 	.star-icon {
 		color: #f59e0b;
-		font-size: 1.1em;
+		font-size: 1.2em;
 	}
 
 	.total-votes {
@@ -276,7 +231,7 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 1.2em;
+		margin-bottom: 1.4em;
 	}
 
 	.comments-header h3 {
@@ -286,32 +241,34 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 	}
 
 	.comments-badge {
-		background: rgba(var(--accent-rgb, 37, 99, 235), 0.1);
-		color: var(--accent);
-		padding: 0.25em 0.7em;
-		border-radius: 12px;
 		font-size: 0.8em;
 		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		padding: 0.25em 0.7em;
+		border-radius: 999px;
+		background: rgba(var(--accent-rgb, 37, 99, 235), 0.12);
+		color: var(--accent);
 	}
 
 	.comment-form {
 		display: flex;
 		flex-direction: column;
-		gap: 1em;
-		background: rgba(var(--gray-light), 40%);
-		padding: 1.2em;
+		gap: 1.2em;
+		background: rgba(255, 255, 255, 0.6);
+		padding: 1.4em;
 		border-radius: 12px;
-		border: 1px solid rgba(var(--gray), 25%);
+		border: 1px solid rgba(var(--gray), 20%);
 		margin-bottom: 2em;
 	}
 
 	.form-row-grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 1em;
+		gap: 1.2em;
 	}
 
-	@media (max-width: 600px) {
+	@media (max-width: 640px) {
 		.form-row-grid {
 			grid-template-columns: 1fr;
 		}
@@ -324,28 +281,28 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 	}
 
 	.input-group label {
-		font-size: 0.85em;
+		font-size: 0.88em;
 		font-weight: 600;
-		color: rgb(var(--gray-dark));
+		color: rgb(var(--black));
 	}
 
 	.input-group input,
 	.input-group select,
 	.input-group textarea {
-		padding: 0.65em 0.9em;
+		padding: 0.7em 0.9em;
 		border-radius: 8px;
-		border: 1px solid rgba(var(--gray), 35%);
-		background: white;
+		border: 1px solid rgba(var(--gray), 30%);
+		background: #ffffff;
 		font-family: inherit;
-		font-size: 0.92em;
+		font-size: 0.95em;
 		color: rgb(var(--black));
-		transition: border-color 0.2s ease, box-shadow 0.2s ease;
+		outline: none;
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
 	}
 
 	.input-group input:focus,
 	.input-group select:focus,
 	.input-group textarea:focus {
-		outline: none;
 		border-color: var(--accent);
 		box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 37, 99, 235), 0.15);
 	}
@@ -359,17 +316,21 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		background: var(--accent);
 		color: white;
 		border: none;
-		padding: 0.65em 1.5em;
-		font-size: 0.92em;
-		font-weight: 600;
+		padding: 0.7em 1.6em;
 		border-radius: 8px;
+		font-weight: 600;
+		font-size: 0.95em;
 		cursor: pointer;
-		transition: background 0.2s ease, transform 0.1s ease;
+		transition: background 0.15s ease, transform 0.1s ease;
 	}
 
 	.submit-btn:hover {
 		background: var(--accent-dark, #1d4ed8);
 		transform: translateY(-1px);
+	}
+
+	.submit-btn:active {
+		transform: translateY(0);
 	}
 
 	.comments-list {
@@ -378,25 +339,33 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		gap: 1.2em;
 	}
 
+	.empty-comments {
+		text-align: center;
+		padding: 2.2em 1.2em;
+		color: rgb(var(--gray));
+		font-size: 0.95em;
+		background: rgba(var(--gray-light), 30%);
+		border: 1px dashed rgba(var(--gray), 30%);
+		border-radius: 12px;
+	}
+
+	.empty-comments p {
+		margin: 0;
+	}
+
 	.comment-card {
 		display: flex;
 		gap: 1em;
 		padding: 1.2em;
-		background: white;
-		border: 1px solid rgba(var(--gray), 20%);
 		border-radius: 12px;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-		transition: transform 0.15s ease;
-	}
-
-	.comment-card:hover {
-		transform: translateY(-1px);
-		border-color: rgba(var(--gray), 35%);
+		background: #ffffff;
+		border: 1px solid rgba(var(--gray), 20%);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 	}
 
 	.comment-avatar {
-		width: 42px;
-		height: 42px;
+		width: 40px;
+		height: 40px;
 		border-radius: 50%;
 		display: flex;
 		align-items: center;
@@ -469,17 +438,39 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		const postId = ratingContainer.dataset.postId || 'mpesa-audit';
 		const storageRatingKey = `briomar_rating_${postId}`;
 		const storageCommentsKey = `briomar_comments_${postId}`;
-
-		// Initial aggregate state
-		let baseTotalVotes = 42;
-		let baseSumVotes = 395; // avg ≈ 9.40
+		const storageVotesKey = `briomar_votes_agg_${postId}`;
 
 		const statusEl = document.getElementById('user-vote-status');
 		const avgDisplay = document.getElementById('avg-score-display');
 		const totalDisplay = document.getElementById('total-votes-display');
 		const pills = document.querySelectorAll('.score-pill');
 
-		// Check saved rating
+		// Load stored votes aggregate if any (starts at 0)
+		let aggData = { total: 0, sum: 0 };
+		try {
+			const savedAgg = localStorage.getItem(storageVotesKey);
+			if (savedAgg) {
+				aggData = JSON.parse(savedAgg);
+			}
+		} catch (e) {
+			console.error(e);
+		}
+
+		function updateAggDisplay() {
+			if (!avgDisplay || !totalDisplay) return;
+			if (aggData.total === 0) {
+				avgDisplay.textContent = '—';
+				totalDisplay.textContent = '(0 ratings)';
+			} else {
+				const avg = (aggData.sum / aggData.total).toFixed(1);
+				avgDisplay.textContent = avg;
+				totalDisplay.textContent = `(${aggData.total} ${aggData.total === 1 ? 'rating' : 'ratings'})`;
+			}
+		}
+
+		updateAggDisplay();
+
+		// Check if user previously voted
 		const savedRating = localStorage.getItem(storageRatingKey);
 		if (savedRating) {
 			const savedVal = parseInt(savedRating, 10);
@@ -510,19 +501,18 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 				}
 
 				// Update aggregate
-				let currentTotal = baseTotalVotes;
-				let currentSum = baseSumVotes;
-
 				if (!prevRating) {
-					currentTotal += 1;
-					currentSum += score;
+					aggData.total += 1;
+					aggData.sum += score;
 				} else {
-					currentSum = currentSum - parseInt(prevRating, 10) + score;
+					aggData.sum = aggData.sum - parseInt(prevRating, 10) + score;
 				}
 
-				const newAvg = (currentSum / currentTotal).toFixed(1);
-				if (avgDisplay) avgDisplay.textContent = newAvg;
-				if (totalDisplay) totalDisplay.textContent = `(${currentTotal} ratings)`;
+				try {
+					localStorage.setItem(storageVotesKey, JSON.stringify(aggData));
+				} catch (e) {}
+
+				updateAggDisplay();
 			});
 		});
 
@@ -540,9 +530,10 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		// Comment submission logic
 		const form = document.getElementById('comment-form') as HTMLFormElement;
 		const commentsList = document.getElementById('comments-list');
+		const emptyCommentsEl = document.getElementById('empty-comments');
 		const countTitle = document.getElementById('comments-count-title');
 
-		// Load stored user comments
+		// Load stored user comments (starts at 0)
 		let userComments: Array<{
 			name: string;
 			handle: string;
@@ -561,9 +552,12 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		}
 
 		function updateCommentsCount() {
-			const total = 3 + userComments.length;
+			const total = userComments.length;
 			if (countTitle) {
 				countTitle.textContent = `Discussion & Comments (${total})`;
+			}
+			if (emptyCommentsEl) {
+				emptyCommentsEl.style.display = total === 0 ? 'block' : 'none';
 			}
 		}
 
@@ -601,11 +595,10 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 				</div>
 			`;
 
-			// Prepend above preloaded comments
-			commentsList.prepend(article);
+			commentsList.appendChild(article);
 		}
 
-		// Render stored user comments on load
+		// Render stored real comments on load
 		userComments.forEach((c) => renderUserComment(c));
 		updateCommentsCount();
 
@@ -623,7 +616,6 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 
 				if (!rawAuthor || !body) return;
 
-				// Parse handle if present (e.g. John Doe (@johndoe))
 				let name = rawAuthor;
 				let handle = '';
 				const handleMatch = rawAuthor.match(/(.*?)\s*\((@.*?)\)/);
@@ -653,14 +645,12 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 				renderUserComment(newComment);
 				updateCommentsCount();
 
-				// Reset form
 				bodyInput.value = '';
 				scoreSelect.value = '';
 
-				// Scroll smoothly to the comment
-				const firstComment = commentsList?.firstElementChild as HTMLElement;
-				if (firstComment) {
-					firstComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+				const lastComment = commentsList?.lastElementChild as HTMLElement;
+				if (lastComment) {
+					lastComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 				}
 			});
 		}
@@ -672,7 +662,6 @@ const { postId = 'mpesa-app-architecture-audit' } = Astro.props;
 		}
 	}
 
-	// Run on initial load and view transitions
 	setupCommentsAndRatings();
 	document.addEventListener('astro:page-load', setupCommentsAndRatings);
 </script>
