@@ -1,0 +1,112 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+
+const pdfPath = '/resume/Kapolon_Braine_Lomoni_Resume.pdf';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Resume | ${SITE_TITLE}`} description="Briane Lomoni's Resume - Full-Stack & AI Systems Developer" />
+		<style>
+			.resume-container {
+				width: 960px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				padding: 2em 1em;
+			}
+			.resume-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				flex-wrap: wrap;
+				gap: 1em;
+				margin-bottom: 2em;
+				padding-bottom: 1.5em;
+				border-bottom: 1px solid rgba(var(--gray), 20%);
+			}
+			.action-buttons {
+				display: flex;
+				gap: 0.8em;
+			}
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				padding: 0.6em 1.2em;
+				font-size: 0.95em;
+				font-weight: 600;
+				border-radius: 8px;
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+			.btn-primary {
+				background: var(--accent);
+				color: white;
+			}
+			.btn-primary:hover {
+				background: var(--accent-dark);
+				color: white;
+			}
+			.btn-secondary {
+				background: rgba(var(--gray-light), 80%);
+				color: rgb(var(--gray-dark));
+			}
+			.btn-secondary:hover {
+				background: rgba(var(--gray-light), 100%);
+			}
+			.pdf-frame-wrapper {
+				width: 100%;
+				height: 850px;
+				border-radius: 12px;
+				overflow: hidden;
+				box-shadow: var(--box-shadow);
+				border: 1px solid rgba(var(--gray), 15%);
+				background: #fff;
+			}
+			.pdf-frame-wrapper iframe {
+				width: 100%;
+				height: 100%;
+				border: none;
+			}
+			.fallback-msg {
+				margin-top: 1.5em;
+				text-align: center;
+				font-size: 0.95em;
+				color: rgb(var(--gray));
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main class="resume-container">
+			<div class="resume-header">
+				<div>
+					<h1 style="margin: 0; font-size: 2.2em;">Resume</h1>
+					<p style="margin: 0.3em 0 0 0; color: rgb(var(--gray));">Briane Lomoni • Full-Stack & Systems Developer</p>
+				</div>
+				<div class="action-buttons">
+					<a href={pdfPath} download="Kapolon_Braine_Lomoni_Resume.pdf" class="btn btn-primary">
+						Download PDF
+					</a>
+					<a href={pdfPath} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+						Open in New Tab ↗
+					</a>
+				</div>
+			</div>
+
+			<div class="pdf-frame-wrapper">
+				<iframe src={`${pdfPath}#toolbar=0&view=FitH`} title="Briane Lomoni Resume">
+					<p>Your browser doesn't support embedded PDFs. <a href={pdfPath}>Download the PDF directly</a>.</p>
+				</iframe>
+			</div>
+
+			<p class="fallback-msg">
+				Trouble viewing the PDF embedded above? You can <a href={pdfPath} target="_blank">open the direct PDF file</a> or <a href="/resume/index.html">view the legacy link</a>.
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>

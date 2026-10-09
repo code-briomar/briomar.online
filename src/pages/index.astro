@@ -1,0 +1,157 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			.hero-section {
+				margin-bottom: 3em;
+				padding-bottom: 2em;
+				border-bottom: 1px solid rgba(var(--gray), 20%);
+			}
+			.hero-title {
+				font-size: 2.8em;
+				margin-bottom: 0.2em;
+				line-height: 1.1;
+			}
+			.hero-subtitle {
+				font-size: 1.25em;
+				color: rgb(var(--gray));
+				margin-bottom: 1.2em;
+			}
+			.hero-bio {
+				font-size: 1.1em;
+				line-height: 1.6;
+				color: rgb(var(--gray-dark));
+			}
+			.cta-row {
+				display: flex;
+				gap: 1em;
+				margin-top: 1.5em;
+				flex-wrap: wrap;
+			}
+			.btn {
+				display: inline-flex;
+				align-items: center;
+				padding: 0.6em 1.2em;
+				font-size: 0.95em;
+				font-weight: 600;
+				border-radius: 8px;
+				text-decoration: none;
+				transition: all 0.2s ease;
+			}
+			.btn-primary {
+				background: var(--accent);
+				color: white;
+			}
+			.btn-primary:hover {
+				background: var(--accent-dark);
+				color: white;
+			}
+			.btn-outline {
+				border: 1px solid rgba(var(--gray), 40%);
+				color: rgb(var(--gray-dark));
+			}
+			.btn-outline:hover {
+				background: rgba(var(--gray-light), 60%);
+			}
+			.section-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: baseline;
+				margin-bottom: 1.5em;
+			}
+			.posts-list {
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+				display: flex;
+				flex-direction: column;
+				gap: 1.5em;
+			}
+			.post-card {
+				display: flex;
+				flex-direction: column;
+				gap: 0.3em;
+				padding: 1.2em;
+				border-radius: 12px;
+				background: rgba(var(--gray-light), 30%);
+				border: 1px solid rgba(var(--gray), 15%);
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
+				text-decoration: none;
+			}
+			.post-card:hover {
+				transform: translateY(-2px);
+				box-shadow: var(--box-shadow);
+				background: rgba(var(--gray-light), 50%);
+			}
+			.post-title {
+				font-size: 1.35em;
+				font-weight: 700;
+				color: rgb(var(--black));
+				margin: 0;
+			}
+			.post-desc {
+				font-size: 0.98em;
+				color: rgb(var(--gray-dark));
+				margin: 0;
+			}
+			.post-date {
+				font-size: 0.85em;
+				color: rgb(var(--gray));
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="hero-section">
+				<h1 class="hero-title">Briane Lomoni</h1>
+				<p class="hero-subtitle">Systems, Mobile & AI Engineer • Strathmore University</p>
+				<p class="hero-bio">
+					I write high-performance code, tear down complex software architectures, and build resilient offline tools for emerging markets.
+				</p>
+				<div class="cta-row">
+					<a href="/blog" class="btn btn-primary">Read the Blog &rarr;</a>
+					<a href="/resume" class="btn btn-outline">View Resume</a>
+					<a href="https://github.com/code-briomar" target="_blank" rel="noopener noreferrer" class="btn btn-outline">GitHub Profile ↗</a>
+				</div>
+			</section>
+
+			<section>
+				<div class="section-header">
+					<h2 style="font-size: 1.6em; margin: 0;">Recent Posts & Teardowns</h2>
+					<a href="/blog" style="font-size: 0.9em; font-weight: 600;">View all &rarr;</a>
+				</div>
+				<ul class="posts-list">
+					{
+						posts.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`} class="post-card">
+									<h3 class="post-title">{post.data.title}</h3>
+									<p class="post-desc">{post.data.description}</p>
+									<span class="post-date">
+										<FormattedDate date={post.data.pubDate} />
+									</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
