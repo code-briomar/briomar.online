@@ -1,6 +1,6 @@
 ---
-title: "Under the Hood: Decompiling the M-PESA App & Why Those Quickmart Lines Are So Long"
-description: "A forensic teardown of Safaricom's consumer app: why you wait at supermarket tills, the hardcoded 3-second timer, 24 startup blockers, and what we built to fix it."
+title: "The 3-Second Freeze: Why Supermarket M-PESA Lines Move at a Crawl (Part 1)"
+description: "A look inside the decompiled code: why supermarket checkouts in Nairobi grind to a halt, the 3,000ms CountDownTimer in SplashActivity, and how we built an instant offline trigger."
 pubDate: 2026-10-09
 heroImage: "../../assets/blog-placeholder-1.jpg"
 ---
@@ -12,7 +12,7 @@ The cashier is fast—barcodes are scanned in seconds. But then the entire line 
 Why? Because payment time has arrived, and every single shopper is forced to pick their poison:
 
 1. **Option A: The M-PESA App.** The shopper unlocks their phone, taps the green icon, and stares at a frozen splash screen for three full seconds. If their mobile data is fluctuating inside the store, the app hangs further while trying to ping remote analytics servers before the keypad even appears.
-2. **Option B: The SIM Toolkit.** If data bundles are low, they retreat to the dreaded 1990s SIM Toolkit: *M-PESA $\rightarrow$ Lipa na M-PESA $\rightarrow$ Buy Goods $\rightarrow$ Enter Till Number $\rightarrow$ Enter Amount $\rightarrow$ Enter PIN*, praying the USSD session doesn’t time out midway.
+2. **Option B: The SIM Toolkit.** If data bundles are low, they retreat to the dreaded 1990s SIM Toolkit: *M-PESA → Lipa na M-PESA → Buy Goods → Enter Till Number → Enter Amount → Enter PIN*, praying the USSD session doesn’t time out midway.
 
 Multiply those 10 to 15 seconds of pure software friction across a line of twelve people, and you suddenly realize why grocery queues in Nairobi move at a crawl.
 
@@ -132,37 +132,7 @@ At every tier of this 6-level chain, lifecycle events (`onCreate`, `onResume`, `
 
 ---
 
-## 5. Not Just an App: The 7 Embedded Subsystems
-
-Standard payment apps are usually thin clients: they present clean input fields, take your PIN, and securely send a lightweight JSON payload to an API server.
-
-The M-PESA Super App, by contrast, is a distributed mini-operating system packing **7 distinct embedded subsystems**:
-
-1. **Alibaba Griver Mini-Program OS**: An entire web/hybrid runtime (with an 18 MB bridge manifest) powering lifestyle mini-apps.
-2. **Dual Mobile Service Stacks**: Both **Google Play Services** and **Huawei Mobile Services (HMS Core)** embedded side-by-side.
-3. **Dynatrace APM**: Enterprise-grade bytecode instrumentation and monitoring.
-4. **Adjust Marketing Analytics**: Device fingerprinting and campaign tracking.
-5. **Hardware Keystore & Security Sandboxing**: Biometric authorization and encrypted token vaults.
-6. **Custom Network Interceptors**: OkHttp layers injecting dynamic security assertions into HTTP headers.
-7. **Offline Cache Engine**: Encrypted SQLite storage for profile caches and transaction ledgers.
-
-While mini-apps and lifestyle services make sense from a business expansion standpoint, bundling a mini-OS into a critical national financial pipeline comes at the expense of its most fundamental duty: sending money quickly.
-
----
-
-## 6. The Forensic Edge Case: Why Do PDF Receipts Fail?
-
-For shoppers and businesses that rely on downloading official PDF transaction receipts, silent export failures have been a recurring complaint on certain Android 11+ devices.
-
-Static analysis revealed the root causes:
-* **Scoped Storage Permission Timing**: Modern Android (API 30+) restricts direct filesystem writes. The receipt generator attempts direct file creation before the Storage Access Framework callback completes.
-* **Background Worker Lifecycle Teardown**: The PDF bitmap renderer executes on a worker thread tied to the temporary confirmation screen. If the user taps "Done" while the receipt is rendering, the parent Activity terminates, killing the worker before `PdfDocument.writeTo()` flushes the file descriptor.
-
-The result is a 0-byte corrupt file or an unhandled exception, leaving the user with an empty download.
-
----
-
-## 7. The Antidote: Building `MpesaQuick`
+## 5. The Antidote: Building `MpesaQuick`
 
 Critiquing code is easy; building a better solution is what actually matters.
 
@@ -171,12 +141,46 @@ After uncovering these architectural bottlenecks, I set out to answer a simple q
 
 That resulted in **`MpesaQuick`**, an experimental companion prototype built with modern Android engineering:
 
-* **100% Offline GSM USSD (`*334#`)**: Instead of hitting cloud APIs that fail when bundles expire at the till, it directly formats native GSM USSD strings (`*334#`) straight to your SIM dialer in a single tap.
-* **Sub-200ms Cold Start**: Built with **Jetpack Compose** and Material 3, cutting out all artificial timers and multi-tier inheritance trees.
-* **Local SMS Parsing & Room DB**: Intercepts incoming confirmation SMS messages locally, automatically cataloging frequent payees (Tills, PayBills, Pochi) in an offline SQLite database.
-* **Instant Offline PDF Receipts**: Generates clean, Apple-styled receipts locally in milliseconds using Android’s native `android.graphics.pdf.PdfDocument`.
+<div style="text-align: center; margin: 2em 0;">
+  <img src="/images/mpesaquick-demo-blurred.png" alt="MpesaQuick Prototype Interface" style="max-width: 320px; border-radius: 18px; box-shadow: var(--box-shadow); border: 1px solid rgba(var(--gray), 25%); display: inline-block;" />
+  <p style="font-size: 0.85em; color: rgb(var(--gray)); margin-top: 0.8em;">
+    <em>Figure 1: MpesaQuick running on-device (phone numbers and names blurred for privacy).</em>
+  </p>
+</div>
+
+### How It Activates USSD in Under 200ms
+
+Instead of opening a bloated app that needs to connect to remote web servers over fragile 4G inside a supermarket basement, `MpesaQuick` bypasses HTTP APIs entirely:
+
+```text
+[Tap "Pay KES 150"]
+       │
+       ▼
+[Format GSM USSD String: *334*2*1*TILL*150#]
+       │
+       ▼
+[Launch Android Telephony Intent (ACTION_CALL)]
+       │
+       ▼
+[Direct GSM Cellular Handshake — Zero Internet Required]
+       │
+       ▼
+[Instant SIM Dialog: "Enter M-PESA PIN to Pay KES 150 to..."]
+```
+
+1. **One-Tap Dial Formulation**: It dynamically formats the exact GSM USSD payload (e.g. `*334*2*1*TILL*150#`) for the selected payee.
+2. **Direct Modem Invocation**: It passes the formatted string to Android's native `ACTION_CALL` intent, triggering the baseband modem directly.
+3. **Instant Network Prompt**: Within 200 milliseconds, your phone's native SIM prompt pops up asking for your PIN. No waiting for 4G data, no splash timers, and no multi-level SIM Toolkit menus.
 
 > *Disclaimer: M-PESA is a registered trademark of Safaricom PLC. MpesaQuick is an independent, non-commercial open-source educational prototype.*
+
+---
+
+## What’s Coming Next in This Series
+
+This is Part 1 of our mobile systems teardown. In the upcoming posts, we will explore:
+* **Part 2:** *The 7 Embedded Engines: Alibaba Griver and the Super-App Identity Crisis.*
+* **Part 3:** *Forensics of a Bug: Why M-PESA PDF Receipts Fail on Android 11+.*
 
 ---
 
