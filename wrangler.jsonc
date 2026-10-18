@@ -7,5 +7,12 @@
 	},
 	"assets": {
 		"directory": "./dist"
-	}
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "briomar-blog-db",
+			"database_id": "6abb4347-0076-4a6f-b9f6-0f622a67ec55"
+		}
+	]
 }

@@ -465,37 +465,44 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 		const ratingStrip = document.querySelector('.rating-strip') as HTMLElement;
 		if (!ratingStrip) return;
 
-		const postId = ratingStrip.dataset.postId || 'mpesa-audit';
+		const postId = ratingStrip.dataset.postId || 'why-mpesa-is-slow';
 		const storageRatingKey = `briomar_rating_${postId}`;
-		const storageCommentsKey = `briomar_comments_${postId}`;
-		const storageVotesKey = `briomar_votes_agg_${postId}`;
+		const storageVoterTokenKey = `briomar_voter_token`;
+
+		// Unique voter token to allow user to change their rating rather than double-vote
+		let voterToken = localStorage.getItem(storageVoterTokenKey);
+		if (!voterToken) {
+			voterToken = 'voter_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+			try {
+				localStorage.setItem(storageVoterTokenKey, voterToken);
+			} catch (_) {}
+		}
 
 		const statusEl = document.getElementById('user-vote-status');
 		const avgDisplay = document.getElementById('avg-score-display');
 		const totalDisplay = document.getElementById('total-votes-display');
 		const pills = document.querySelectorAll('.seg-pill');
 
-		let aggData = { total: 0, sum: 0 };
-		try {
-			const savedAgg = localStorage.getItem(storageVotesKey);
-			if (savedAgg) aggData = JSON.parse(savedAgg);
-		} catch (e) {
-			console.error(e);
-		}
-
-		function updateAggDisplay() {
+		function updateAggDisplay(total: number, avg: number | null) {
 			if (!avgDisplay || !totalDisplay) return;
-			if (aggData.total === 0) {
+			if (!total || avg === null) {
 				avgDisplay.textContent = '—';
 				totalDisplay.textContent = '(0 ratings)';
 			} else {
-				const avg = (aggData.sum / aggData.total).toFixed(1);
-				avgDisplay.textContent = avg;
-				totalDisplay.textContent = `(${aggData.total} ${aggData.total === 1 ? 'rating' : 'ratings'})`;
+				avgDisplay.textContent = avg.toFixed(1);
+				totalDisplay.textContent = `(${total} ${total === 1 ? 'rating' : 'ratings'})`;
 			}
 		}
 
-		updateAggDisplay();
+		// 1. Fetch live ratings from D1 Database
+		fetch(`/api/ratings?postId=${encodeURIComponent(postId)}`)
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data) => {
+				if (data && typeof data.totalVotes === 'number') {
+					updateAggDisplay(data.totalVotes, data.avgScore);
+				}
+			})
+			.catch((err) => console.log('Rating fetch fallback:', err));
 
 		const savedRating = localStorage.getItem(storageRatingKey);
 		if (savedRating) {
@@ -508,15 +515,16 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 		}
 
 		pills.forEach((pill) => {
-			pill.addEventListener('click', () => {
+			pill.addEventListener('click', async () => {
 				const score = parseInt(pill.getAttribute('data-score') || '10', 10);
-				const prevRating = localStorage.getItem(storageRatingKey);
 
-				localStorage.setItem(storageRatingKey, score.toString());
+				try {
+					localStorage.setItem(storageRatingKey, score.toString());
+				} catch (_) {}
 				highlightPill(score);
 
 				if (statusEl) {
-					statusEl.textContent = `★ You rated this ${score}/10. Thanks for your feedback!`;
+					statusEl.textContent = `★ Saving your ${score}/10 rating...`;
 					statusEl.classList.add('voted');
 				}
 
@@ -525,18 +533,24 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 					commentScoreSelect.value = score.toString();
 				}
 
-				if (!prevRating) {
-					aggData.total += 1;
-					aggData.sum += score;
-				} else {
-					aggData.sum = aggData.sum - parseInt(prevRating, 10) + score;
-				}
-
 				try {
-					localStorage.setItem(storageVotesKey, JSON.stringify(aggData));
-				} catch (e) {}
-
-				updateAggDisplay();
+					const res = await fetch('/api/ratings', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ postId, score, voterToken }),
+					});
+					if (res.ok) {
+						const data = await res.json();
+						updateAggDisplay(data.totalVotes, data.avgScore);
+						if (statusEl) {
+							statusEl.textContent = `★ You rated this ${score}/10. Thanks for your feedback!`;
+						}
+					}
+				} catch (e) {
+					if (statusEl) {
+						statusEl.textContent = `★ You rated this ${score}/10. Thanks for your feedback!`;
+					}
+				}
 			});
 		});
 
@@ -551,29 +565,17 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 			});
 		}
 
-		// Comment Submission
+		// Comment Submission & Retrieval
 		const form = document.getElementById('comment-form') as HTMLFormElement;
 		const commentsList = document.getElementById('comments-list');
 		const emptyCommentsEl = document.getElementById('empty-comments');
 		const countBadge = document.getElementById('comments-count-badge');
+		const submitBtn = document.getElementById('submit-comment-btn') as HTMLButtonElement;
 
-		let userComments: Array<{
-			name: string;
-			handle: string;
-			score: string;
-			body: string;
-			date: string;
-		}> = [];
+		let commentCount = 0;
 
-		try {
-			const raw = localStorage.getItem(storageCommentsKey);
-			if (raw) userComments = JSON.parse(raw);
-		} catch (e) {
-			console.error(e);
-		}
-
-		function updateCommentsCount() {
-			const total = userComments.length;
+		function updateCommentsCount(total: number) {
+			commentCount = total;
 			if (countBadge) countBadge.textContent = total.toString();
 			if (emptyCommentsEl) {
 				emptyCommentsEl.style.display = total === 0 ? 'block' : 'none';
@@ -582,14 +584,19 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 
 		function renderComment(c: {
 			name: string;
-			handle: string;
-			score: string;
+			handle?: string | null;
+			score?: string | number | null;
 			body: string;
-			date: string;
+			date?: string;
+			createdAt?: string;
 		}) {
 			if (!commentsList) return;
 
-			const initials = c.name
+			if (emptyCommentsEl) {
+				emptyCommentsEl.style.display = 'none';
+			}
+
+			const initials = (c.name || 'U')
 				.split(' ')
 				.map((n) => n[0])
 				.slice(0, 2)
@@ -599,6 +606,14 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 			const palette = ['#262626', '#333333', '#404040', '#1f1f1f'];
 			const color = palette[Math.abs(c.name.length) % palette.length];
 
+			let dateDisplay = c.date || 'Recently';
+			if (c.createdAt) {
+				try {
+					const d = new Date(c.createdAt);
+					dateDisplay = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+				} catch (_) {}
+			}
+
 			const article = document.createElement('article');
 			article.className = 'comment-card';
 			article.innerHTML = `
@@ -607,8 +622,8 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 					<div class="comment-meta">
 						<span class="comment-name">${escapeHtml(c.name)}</span>
 						${c.handle ? `<span class="comment-handle">${escapeHtml(c.handle)}</span>` : ''}
-						<span class="comment-date">${escapeHtml(c.date)}</span>
-						${c.score ? `<span class="comment-rating-tag">★ ${escapeHtml(c.score)}/10</span>` : ''}
+						<span class="comment-date">${escapeHtml(dateDisplay)}</span>
+						${c.score ? `<span class="comment-rating-tag">★ ${escapeHtml(c.score.toString())}/10</span>` : ''}
 					</div>
 					<p class="comment-text">${escapeHtml(c.body)}</p>
 				</div>
@@ -617,11 +632,24 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 			commentsList.appendChild(article);
 		}
 
-		userComments.forEach((c) => renderComment(c));
-		updateCommentsCount();
+		// 2. Fetch live comments from D1 Database
+		fetch(`/api/comments?postId=${encodeURIComponent(postId)}`)
+			.then((res) => (res.ok ? res.json() : null))
+			.then((data) => {
+				if (data && Array.isArray(data.comments)) {
+					// Clear placeholder if any
+					if (commentsList) {
+						const cards = commentsList.querySelectorAll('.comment-card');
+						cards.forEach((c) => c.remove());
+					}
+					data.comments.forEach((c: any) => renderComment(c));
+					updateCommentsCount(data.comments.length);
+				}
+			})
+			.catch((err) => console.log('Comments fetch fallback:', err));
 
 		if (form) {
-			form.addEventListener('submit', (e) => {
+			form.addEventListener('submit', async (e) => {
 				e.preventDefault();
 
 				const authorInput = document.getElementById('comment-author') as HTMLInputElement;
@@ -645,30 +673,44 @@ const { postId = 'why-mpesa-is-slow' } = Astro.props;
 					handle = '';
 				}
 
-				const newComment = {
-					name,
-					handle,
-					score,
-					body,
-					date: 'Just now',
-				};
-
-				userComments.push(newComment);
-				try {
-					localStorage.setItem(storageCommentsKey, JSON.stringify(userComments));
-				} catch (err) {
-					console.error(err);
+				if (submitBtn) {
+					submitBtn.disabled = true;
+					submitBtn.textContent = 'Posting...';
 				}
 
-				renderComment(newComment);
-				updateCommentsCount();
+				try {
+					const res = await fetch('/api/comments', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ postId, name, handle, score, body }),
+					});
 
-				bodyInput.value = '';
-				scoreSelect.value = '';
+					const result = res.ok ? await res.json() : null;
+					const newComment = result?.comment || {
+						name,
+						handle,
+						score,
+						body,
+						date: 'Just now',
+					};
 
-				const lastComment = commentsList?.lastElementChild as HTMLElement;
-				if (lastComment) {
-					lastComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+					renderComment(newComment);
+					updateCommentsCount(commentCount + 1);
+
+					bodyInput.value = '';
+					scoreSelect.value = '';
+
+					const lastComment = commentsList?.lastElementChild as HTMLElement;
+					if (lastComment) {
+						lastComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+					}
+				} catch (err) {
+					console.error('Failed to post comment', err);
+				} finally {
+					if (submitBtn) {
+						submitBtn.disabled = false;
+						submitBtn.textContent = 'Post Comment';
+					}
 				}
 			});
 		}
