@@ -131,12 +131,6 @@ const isBlogPost = Astro.url.pathname.includes('/blog/');
 			<article>
 				<header class="post-header">
 					<div class="meta-bar">
-						{isBlogPost && (
-							<>
-								<span class="badge-series">Systems Audit</span>
-								<span>•</span>
-							</>
-						)}
 						<FormattedDate date={pubDate} />
 						{updatedDate && (
 							<>
