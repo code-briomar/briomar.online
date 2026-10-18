@@ -2,6 +2,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "briomar-online",
 	"compatibility_date": "2026-10-09",
+	"main": "src/worker.ts",
 	"build": {
 		"command": "npm run build"
 	},
